@@ -114,6 +114,13 @@ BOOL Cguofei5Dlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 
+		CRect cRect;
+		GetWindowRect(&cRect);
+		ScreenToClient(&cRect);
+		m_pMyFrame->MoveWindow(&cRect);
+		m_pMyFrame->ShowWindow(SW_SHOW);
+
+
 
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -185,13 +192,13 @@ int Cguofei5Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// Create the frame window with "this" as the parent
 	m_pMyFrame = new CFrameWnd;
-	m_pMyFrame->Create(strMyClass, _T(""), WS_CHILD, CRect(0, 0, 700, 700), this);
+	m_pMyFrame->Create(strMyClass, _T(""), WS_CHILD, CRect(0, 0, 1000, 700), this);
 	m_pMyFrame->ShowWindow(SW_SHOW);
 
 	// and finally, create the splitter with the frame as the parent
 	m_cSplitter.CreateStatic(m_pMyFrame, 1, 2); //在Frame里切分视图窗口为1×2，就是一行两列
-	m_cSplitter.CreateView(0, 0, RUNTIME_CLASS(CMyFormView0), CSize(450, 50), NULL);//第一行一列
-	m_cSplitter.CreateView(0, 1, RUNTIME_CLASS(CMyFormView1), CSize(100, 100), NULL);//第一行二列
+	m_cSplitter.CreateView(0, 0, RUNTIME_CLASS(CMyFormView0), CSize(450, 700), NULL);//第一行一列
+	m_cSplitter.CreateView(0, 1, RUNTIME_CLASS(CMyFormView1), CSize(550, 700), NULL);//第一行二列
 
 	
 	return 0;

@@ -1,4 +1,4 @@
-ï»¿#include"pch.h"
+#include"pch.h"
 #include"ship.h"
 #include<math.h>
 
@@ -63,11 +63,11 @@ void Ship::set_ship_profile()
 	pm_dy_shipdata->ship_profile[1].x = 0.5 * pm_sta_shipdata->width;
 	pm_dy_shipdata->ship_profile[1].y = -0.5 * pm_sta_shipdata->length;
 	pm_dy_shipdata->ship_profile[2].x = 0.5 * pm_sta_shipdata->width;
-	pm_dy_shipdata->ship_profile[2].y = 0.5 * pm_sta_shipdata->length;
+	pm_dy_shipdata->ship_profile[2].y = 0.2 * pm_sta_shipdata->length;
 	pm_dy_shipdata->ship_profile[3].x = 0;
-	pm_dy_shipdata->ship_profile[3].y = pm_sta_shipdata->length * 0.9;
+	pm_dy_shipdata->ship_profile[3].y = pm_sta_shipdata->length * 0.5;
 	pm_dy_shipdata->ship_profile[4].x = -0.5 * pm_sta_shipdata->width;
-	pm_dy_shipdata->ship_profile[4].y = 0.5 * pm_sta_shipdata->length;
+	pm_dy_shipdata->ship_profile[4].y = 0.2 * pm_sta_shipdata->length;
 }
 void Ship:: dy_set_profile()
 {
@@ -88,9 +88,9 @@ void Ship::set_ship_profile_byscale(double scale)
 
 double Ship::ca_juli(double lati, double longi)
 {
-	//è®¡ç®—è·ç¦»
+	//¼ÆËã¾àÀë
 	double a, b, R;
-	R = 6378137; // åœ°çƒåŠå¾„
+	R = 6378137; // µØÇò°ë¾¶
 	a = (lati- pm_dy_shipdata->latitude)* 3.14 / 180.0;
 	b = (longi- pm_dy_shipdata->longitude) * 3.14 / 180.0;
 	double sa2, sb2;
@@ -102,34 +102,34 @@ double Ship::ca_juli(double lati, double longi)
 }
 void Ship::showmessage()
 {
-	cout << "èˆ¹åï¼š" << pm_sta_shipdata->name << endl;
-	cout << "å‘¼å·ï¼š";
+	cout << "´¬Ãû£º" << pm_sta_shipdata->name << endl;
+	cout << "ºôºÅ£º";
 	for (int i = 0; i < 4; i++) {
 		cout << pm_sta_shipdata->number[i];
 	}
 	cout << endl;
-	cout << "MMSIï¼š";
+	cout << "MMSI£º";
 	for (int i = 0; i < 9; i++) {
 		cout << pm_sta_shipdata->MMSI[i];
 	}
 	cout << endl;
-	cout << "èˆ¹é•¿ï¼š" << pm_sta_shipdata->length << "ç±³" << endl;
-	cout << "èˆ¹å®½ï¼š" << pm_sta_shipdata->width << "ç±³" << endl;
-	cout << "åƒæ°´ï¼š" << pm_sta_shipdata->draft << "ç±³" << endl;
-	cout << "æŽ’æ°´ï¼š" << pm_sta_shipdata->displacement << "å¨" << endl;
-	cout << "èˆªå‘ï¼š" << pm_dy_shipdata->course << "Â°" << endl;
-	cout << "èˆªé€Ÿï¼š" << pm_dy_shipdata->speed << "km/h" << endl;
-	cout << "èˆ¹èˆ¶ä½ç½®ï¼š" << pm_dy_shipdata->latitude << "Â°";
+	cout << "´¬³¤£º" << pm_sta_shipdata->length << "Ã×" << endl;
+	cout << "´¬¿í£º" << pm_sta_shipdata->width << "Ã×" << endl;
+	cout << "³ÔË®£º" << pm_sta_shipdata->draft << "Ã×" << endl;
+	cout << "ÅÅË®£º" << pm_sta_shipdata->displacement << "¶Ö" << endl;
+	cout << "º½Ïò£º" << pm_dy_shipdata->course << "¡ã" << endl;
+	cout << "º½ËÙ£º" << pm_dy_shipdata->speed << "km/h" << endl;
+	cout << "´¬²°Î»ÖÃ£º" << pm_dy_shipdata->latitude << "¡ã";
 	if (pm_dy_shipdata->latitude < 0)
 		cout << "S"<<" ";
 	else
 		cout << "N"<<" ";
-	cout << pm_dy_shipdata->longitude << "Â°";
+	cout << pm_dy_shipdata->longitude << "¡ã";
 	if (pm_dy_shipdata->longitude < 0)
 		cout << "W" << endl;
 	else
 		cout << "E" << endl;
-	cout << "èˆ¹èˆ¶è½®å»“ä¿¡æ¯ï¼š";
+	cout << "´¬²°ÂÖÀªÐÅÏ¢£º";
 	for (int i = 0; i < 5; i++) {
 		cout <<"("<< pm_dy_shipdata->ship_profile[i].x 
 			<< "," << pm_dy_shipdata->ship_profile[i].y <<")"<< " ";
@@ -147,7 +147,7 @@ dy_shipdata* Ship::outdm()
 }
 double Ship::ca_fangwei(double lati, double longi)
 {
-	//è®¡ç®—æ–¹ä½
+	//¼ÆËã·½Î»
 	double b = (longi - pm_dy_shipdata->longitude) * 3.14 / 180.0;
 	double y = sin(b) * cos(lati * 3.14 / 180.0);
 	double x = cos(pm_dy_shipdata->latitude * 3.14 / 180.0) * sin(lati * 3.14 / 180.0) - sin(pm_dy_shipdata->latitude * 3.14 / 180.0) * cos(lati * 3.14 / 180.0) * cos(b);

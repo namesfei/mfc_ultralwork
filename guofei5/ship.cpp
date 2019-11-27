@@ -1,7 +1,7 @@
 #include"pch.h"
 #include"ship.h"
 #include<math.h>
-
+#include<iostream>
 Ship::Ship()
 {
 	pm_sta_shipdata = new sta_shipdata;
@@ -39,11 +39,14 @@ void Ship::set_position(double latu, double lotu)
 	pm_dy_shipdata->longitude = lotu;
 }
 
-void Ship::set_speed_course(double _speed, double _course) 
+void Ship::set_course(double _course) 
 {
-	pm_dy_shipdata->speed = _speed;
 	pm_dy_shipdata->course = _course;
 	dy_set_profile();
+}
+void Ship::set_speed(double _speed)
+{
+	pm_dy_shipdata->speed = _speed;
 }
 void Ship::set_ship_profile() 
 {

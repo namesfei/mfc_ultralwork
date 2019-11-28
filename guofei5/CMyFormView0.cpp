@@ -4,10 +4,11 @@
 #include "pch.h"
 #include "guofei5.h"
 #include "CMyFormView0.h"
+#include "CMyFormView1.h"
 #include "ship.h"
 #include<vector>
-
-//extern vector<sta_shipdata> v_ship;
+#include"guofei5Dlg.h"
+#include<string>
 static vector<sta_shipdata> v_ship;
 static string strtemp;
 // CMyFormView0
@@ -42,6 +43,8 @@ void CMyFormView0::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT13, i_wid);
 	DDX_Control(pDX, IDC_EDIT12, i_draft);
 	DDX_Control(pDX, IDC_EDIT14, i_disp);
+	DDX_Control(pDX, IDC_SLIDER2, sp_slider);
+	DDX_Control(pDX, IDC_SLIDER1, cous_slider);
 }
 
 BEGIN_MESSAGE_MAP(CMyFormView0, CFormView)
@@ -49,6 +52,8 @@ BEGIN_MESSAGE_MAP(CMyFormView0, CFormView)
 	ON_CBN_SELCHANGE(IDC_COMBO1, &CMyFormView0::OnCbnSelchangeCombo1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CMyFormView0::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON1, &CMyFormView0::OnBnClickedButton1)
+	ON_WM_HSCROLL()
+	ON_WM_VSCROLL()
 END_MESSAGE_MAP()
 
 
@@ -104,12 +109,23 @@ void CMyFormView0::OnInitialUpdate()
 	
 	i_num.SetLimitText(4);
 	i_mmsi.SetLimitText(9);
+
+	sp_slider.SetRange(0, 25);
+	sp_slider.SetTicFreq(1);
+	sp_slider.SetPos(5);
+
+	cous_slider.SetRange(0, 16);
+	cous_slider.SetTicFreq(1);
+	cous_slider.SetPos(8);
 }
 
 
 void CMyFormView0::OnCbnSelchangeCombo1()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	//复位slider
+	sp_slider.EnableWindow(); cous_slider.EnableWindow();
+	sp_slider.SetPos(5); cous_slider.SetPos(8);
 
 	int index = selectship.GetCurSel();
 	CString str;
@@ -118,6 +134,8 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 	for (auto i : v_ship) {
 
 		if (str==i.name) {
+			
+			//CMyView* pView = (CMyView*)((CMainFrame*)AfxGetMainWnd())->m_wndSplitter.GetPane(0, 0));
 			strname = i.name;
 			strnum = i.number;
 			strmmsi = i.MMSI;
@@ -132,8 +150,27 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 			o_wid.SetWindowTextW(strwid);
 			o_draf.SetWindowTextW(strdraf);
 			o_disp.SetWindowTextW(strdisp);
+			//将信息打包
+			CString strtemp;
+			sentship[0] = strname;
+			sentship[1] = strnum;
+			sentship[2] = strmmsi;
+			strtemp.Format(_T("%.3f"), i.length);
+			sentship[3] = strtemp;
+			strtemp.Format(_T("%.3f"), i.width);
+			sentship[4] = strtemp;
+			strtemp.Format(_T("%.3f"), i.draft);
+			sentship[5] = strtemp;
+			strtemp.Format(_T("%.3f"), i.displacement);
+			sentship[6] = strtemp;
+			//
 		}
 	}
+	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
+	CMyFormView1* cf1= (CMyFormView1*)pdlg->m_cSplitter.GetPane(0, 1);
+	cf1->resetval(1);
+	pdlg->m_cSplitter.GetPane(0, 1)->Invalidate();
+	//pdlg->SetTimer(1, 100, NULL);
 	//MessageBox(_T("haha"));
 }
 
@@ -223,30 +260,69 @@ void CMyFormView0::OnBnClickedButton2()
 void CMyFormView0::OnBnClickedButton1()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	int index = selectship.GetCurSel();
-	CString str;
-	selectship.GetLBText(index, str);
-	selectship.DeleteString(index);
-	if (!v_ship.empty()) {
-		for (vector<sta_shipdata>::iterator it = v_ship.begin(); it != v_ship.end();) {
-			if (it->name == str) {
-				it = v_ship.erase(it);
-				break;
+	if (v_ship.size()) {
+
+
+		int index = selectship.GetCurSel();
+		CString str;
+		selectship.GetLBText(index, str);
+		selectship.DeleteString(index);
+		if (!v_ship.empty()) {
+			for (vector<sta_shipdata>::iterator it = v_ship.begin(); it != v_ship.end();) {
+				if (it->name == str) {
+					it = v_ship.erase(it);
+					break;
+				}
+				else {
+					++it;
+				}
 			}
-			else {
-				++it;
-			}	
+			Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
+			CMyFormView1* cf1 = (CMyFormView1*)pdlg->m_cSplitter.GetPane(0, 1);
+			cf1->resetval(0);
 		}
+		//else {
+		//	MessageBox(_T("已删除所有项！"));
+		//}
+		o_name.SetWindowTextW(_T(""));
+		o_num.SetWindowTextW(_T(""));
+		o_mmsi.SetWindowTextW(_T(""));
+		o_len.SetWindowTextW(_T(""));
+		o_wid.SetWindowTextW(_T(""));
+		o_draf.SetWindowTextW(_T(""));
+		o_disp.SetWindowTextW(_T(""));
+		MessageBox(_T("已删除！"));
 	}
-	//else {
-	//	MessageBox(_T("已删除所有项！"));
-	//}
-	o_name.SetWindowTextW(_T(""));
-	o_num.SetWindowTextW(_T(""));
-	o_mmsi.SetWindowTextW(_T(""));
-	o_len.SetWindowTextW(_T(""));
-	o_wid.SetWindowTextW(_T(""));
-	o_draf.SetWindowTextW(_T(""));
-	o_disp.SetWindowTextW(_T(""));
-	MessageBox(_T("已删除！"));
+	else
+	{
+		MessageBox(_T("已删除所有！"));
+	}
+}
+
+
+void CMyFormView0::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	//int i = cous_slid.GetPos();
+	//CString strr;
+	//strr.Format(_T("%d"), i);
+	//MessageBox(strr);
+	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
+	pdlg->m_cSplitter.GetPane(0, 1)->Invalidate();
+
+	CFormView::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+
+void CMyFormView0::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	//int i = sp_slider.GetPos();
+	//CString strr;
+	//strr.Format(_T("%d"), i);
+	//MessageBox(strr);
+	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
+	pdlg->m_cSplitter.GetPane(0, 1)->Invalidate();
+
+	CFormView::OnVScroll(nSBCode, nPos, pScrollBar);
 }

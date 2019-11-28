@@ -35,12 +35,11 @@ public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	CFrameWnd* m_pMyFrame;
 	afx_msg void OnDestroy();
-private:
+public:
 	CSplitterWnd m_cSplitter;
 
 public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-private:
-//	vector<sta_shipdata> v_ship;
-	//std::vector<int> a;
+//public:
+	//sta_shipdata ff;
 };

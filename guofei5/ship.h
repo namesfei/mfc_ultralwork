@@ -33,7 +33,8 @@ public:
 	Ship(sta_shipdata stdat);
 	~Ship();
 	void set_position(double latu, double lotu);
-	void set_speed_course(double _speed, double _course);
+	void set_course(double _course);
+	void set_speed(double _speed);
 	void set_ship_profile();
 	void dy_set_profile();
 	void set_ship_profile_byscale(double scale);

@@ -51,6 +51,12 @@ private:
 public:
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton1();
+public:
+	CString sentship[7];
+	CSliderCtrl sp_slider;
+	CSliderCtrl cous_slider;
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };
 
 

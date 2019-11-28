@@ -28,10 +28,20 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	virtual void OnInitialUpdate();
+//	virtual void OnInitialUpdate();
 public:
 	CBrush m_bgBrush;
-	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+//	CDC dcMem;
+
+	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnBnClickedButton1();
+//	afx_msg void OnPaint();
+	virtual void OnDraw(CDC* /*pDC*/);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+//	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	virtual void OnInitialUpdate();
+	void resetval(bool);
 };
 
 

@@ -24,6 +24,8 @@ Ship::Ship(sta_shipdata stdat)
 	pm_sta_shipdata->width = stdat.width;
 	pm_sta_shipdata->draft = stdat.draft;
 	pm_sta_shipdata->displacement = stdat.displacement;
+	pm_dy_shipdata->course = 0;
+	pm_dy_shipdata->speed = 0;
 
 }
 

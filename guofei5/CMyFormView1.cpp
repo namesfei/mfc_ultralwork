@@ -8,10 +8,11 @@
 #include"guofei5Dlg.h"
 #include "ship.h"
 #include<string>
+#include <vector>
 // CMyFormView1
 
 static double dx = 0, dy = 0,dcours=0;
-
+static vector<vector<double>> linepoint;
 IMPLEMENT_DYNCREATE(CMyFormView1, CFormView)
 
 CMyFormView1::CMyFormView1()
@@ -92,9 +93,9 @@ void CMyFormView1::Dump(CDumpContext& dc) const
 void CMyFormView1::OnBnClickedButton1()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
-	CMyFormView0* cf=(CMyFormView0*) pdlg->m_cSplitter.GetPane(0, 0);
-	MessageBox(cf->sentship[0]);
+	CClientDC dc(this);
+	dc.MoveTo(0, 0);
+	dc.LineTo(500, 500);
 }
 
 
@@ -193,6 +194,22 @@ void CMyFormView1::OnDraw(CDC* pDC)
 				dcMem.LineTo(int(myship.outdm()->ship_profile[i + 1].x * scale + cx + dx), int(-myship.outdm()->ship_profile[i + 1].y * scale + cy - dy));
 			}
 		}
+		//画轨迹
+		if (dy) {
+			CPen pNewPen;
+			pNewPen.CreatePen(PS_DOT, 1, RGB(255, 0, 0)); // 随机色
+			CPen* poldPen = dcMem.SelectObject(&pNewPen);
+			dcMem.MoveTo(cx, cy);
+			vector<double> tempvec;
+			tempvec.push_back(cx + dx);
+			tempvec.push_back(cy - dy);
+			linepoint.push_back(tempvec);
+			for (auto i : linepoint) {
+				dcMem.LineTo(i[0], i[1]);
+			}
+		}
+
+		
 	}
 	/*CBitmap bitmap;
 	bitmap.LoadBitmapW(IDB_BITMAP1);
@@ -273,6 +290,7 @@ void CMyFormView1::resetval(bool i)
 	dx = 0;
 	dy = 0;
 	dcours = 0;
+	linepoint.clear();
 	KillTimer(1);
 	if (i) {
 		SetTimer(1, 100, NULL);

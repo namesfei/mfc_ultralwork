@@ -114,14 +114,11 @@ BOOL Cguofei5Dlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 
-		CRect cRect;
-		GetWindowRect(&cRect);
-		ScreenToClient(&cRect);
-		m_pMyFrame->MoveWindow(&cRect);
-		m_pMyFrame->ShowWindow(SW_SHOW);
-
-
-
+	//CRect cRect;
+	//GetWindowRect(&cRect);
+	//ScreenToClient(&cRect);
+	//m_pMyFrame->MoveWindow(&cRect);
+	//m_pMyFrame->ShowWindow(SW_SHOW);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -183,6 +180,8 @@ int Cguofei5Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// TODO:  在此添加您专用的创建代码
+
+	//分割窗口
 	// Because the CFRameWnd needs a window class, we will create a new one. I just copied the sample from MSDN Help.
 	// When using it in your project, you may keep CS_VREDRAW and CS_HREDRAW and then throw the other three parameters.
 	//需要注册窗口类
@@ -208,8 +207,9 @@ int Cguofei5Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 void Cguofei5Dlg::OnDestroy()
 {
 	CDialogEx::OnDestroy();
-	if (m_pMyFrame) delete m_pMyFrame;
+	
 	// TODO: 在此处添加消息处理程序代码
+	if (m_pMyFrame) delete m_pMyFrame;
 }
 
 

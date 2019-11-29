@@ -33,7 +33,7 @@ void CMyFormView1::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CMyFormView1, CFormView)
 //	ON_WM_CTLCOLOR()
-	ON_BN_CLICKED(IDC_BUTTON1, &CMyFormView1::OnBnClickedButton1)
+	//ON_BN_CLICKED(IDC_BUTTON1, &CMyFormView1::OnBnClickedButton1)
 //	ON_WM_PAINT()
 ON_WM_ERASEBKGND()
 //ON_WM_CTLCOLOR()
@@ -92,13 +92,13 @@ void CMyFormView1::Dump(CDumpContext& dc) const
 //}
 
 
-void CMyFormView1::OnBnClickedButton1()
-{
-	// TODO: 在此添加控件通知处理程序代码
-	CClientDC dc(this);
-	dc.MoveTo(0, 0);
-	dc.LineTo(500, 500);
-}
+//void CMyFormView1::OnBnClickedButton1()
+//{
+//	// TODO: 在此添加控件通知处理程序代码
+//	CClientDC dc(this);
+//	dc.MoveTo(0, 0);
+//	dc.LineTo(500, 500);
+//}
 
 
 //void CMyFormView1::OnPaint()
@@ -114,20 +114,21 @@ void CMyFormView1::OnDraw(CDC* pDC)
 {
 	// TODO: 在此添加专用代码和/或调用基类
 
+	//获取显示船舶信息
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
 	sta_shipdata shipdata;
 	//strtemp = CStringA(strname);//CStringA是Ansi的CString
-	string str = CStringA(cf->sentship[0]);
+	string str = CStringA(cf->m_sentship[0]);
 	shipdata.name = str.c_str();
-	strcpy_s(shipdata.number, CStringA(cf->sentship[1]));
-	strcpy_s(shipdata.MMSI, CStringA(cf->sentship[2]));
-	shipdata.length = float(_ttof(cf->sentship[3]));
-	shipdata.width = float(_ttof(cf->sentship[4]));
-	shipdata.draft = float(_ttof(cf->sentship[5]));
-	shipdata.displacement = float(_ttof(cf->sentship[6]));
+	strcpy_s(shipdata.number, CStringA(cf->m_sentship[1]));
+	strcpy_s(shipdata.MMSI, CStringA(cf->m_sentship[2]));
+	shipdata.length = float(_ttof(cf->m_sentship[3]));
+	shipdata.width = float(_ttof(cf->m_sentship[4]));
+	shipdata.draft = float(_ttof(cf->m_sentship[5]));
+	shipdata.displacement = float(_ttof(cf->m_sentship[6]));
 
-
+	//双缓冲绘图
 	CPoint ptCenter;
 	CRect rect;
 	GetClientRect(&rect);
@@ -137,11 +138,11 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	dcMem.CreateCompatibleDC(pDC);//依附窗口DC创建兼容内存DC
 	//bmp.CreateCompatibleBitmap(&dcMem, rect.Width(), rect.Height());//创建兼容位图
 	bmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());//创建兼容位图
-
 	dcMem.SelectObject(&bmp);//将位图选择进内存DC
 	dcMem.FillSolidRect(rect, pDC->GetBkColor());//按原来背景填充客户区，不然会是黑色
-	//bmp.LoadBitmapW(IDB_BITMAP1);
-	
+
+	//在内存中绘制
+	//绘制背景图
 	CBitmap bitmap;
 	bitmap.LoadBitmap(IDB_BITMAP1);   //这个IDB_BITMAP1要自己添加
 	CBrush  brush;
@@ -150,14 +151,16 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	GetClientRect(&rect);
 	dcMem.Rectangle(0, 0, rect.Width(), rect.Height());  // 这些参数可以调整图片添加位置和大小
 	dcMem.SelectObject(pOldBrush);
-	if (cf->sentship[0]!="") {
+
+	//检测船舶选择，绘制船舶轮廓
+	if (cf->m_sentship[0]!="") {
 
 		Ship myship(shipdata);
 		myship.set_position(38.918055 + dy / 111000,121.630964+dx/1000000);
 		//myship.set_ship_profile();
-		double course = (double)cf->cous_slider.GetPos()-8;
+		double course = (double)cf->cous_slider.GetPos()-8.0;
 		myship.set_course(dcours);
-		myship.set_speed((double)cf->sp_slider.GetPos()-5);
+		myship.set_speed(25.0 - (double)cf->sp_slider.GetPos());
 		myship.set_ship_profile_byscale(scale);
 		//显示动态信息
 		CString str, strcous, strspe, strpos("船舶位置：");
@@ -180,10 +183,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 		//显示船舶信息
 		double cx = 100;//调整起始位置
 		double cy = 600;
-		//double scale = 0.5;
-		/*CString ddd;
-		ddd.Format(_T("%f"), dx);
-		MessageBox(ddd);*/
+		//绘制船舶轮廓
 		for (int i = 0; i < 5; i++) {
 			CPen pNewPen;
 			pNewPen.CreatePen(PS_SOLID, 2, RGB(rand() % 255, rand() % 255, i*20 % 255)); // 随机色
@@ -201,17 +201,15 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			CPen pNewPen;
 			pNewPen.CreatePen(PS_DOT, 1, RGB(255, 0, 0)); // 随机色
 			CPen* poldPen = dcMem.SelectObject(&pNewPen);
-			dcMem.MoveTo(cx, cy);
+			dcMem.MoveTo((int)cx, (int)cy);
 			vector<double> tempvec;
 			tempvec.push_back(cx + dx);
 			tempvec.push_back(cy - dy);
 			linepoint.push_back(tempvec);
 			for (auto i : linepoint) {
-				dcMem.LineTo(i[0], i[1]);
+				dcMem.LineTo((int)i[0], (int)i[1]);
 			}
-		}
-
-		
+		}	
 	}
 	/*CBitmap bitmap;
 	bitmap.LoadBitmapW(IDB_BITMAP1);
@@ -225,7 +223,6 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	pDC->BitBlt(0, 43, rect.Width(), rect.Height(), &dcMem, 0, 0, SRCCOPY);//将内存DC上的图象拷贝到前台
 	dcMem.DeleteDC();//删除DC
 	bmp.DeleteObject();
-
 }
 
 
@@ -242,7 +239,7 @@ BOOL CMyFormView1::OnEraseBkgnd(CDC* pDC)
 	pDC->BitBlt(0,43, rect.Width(), rect.Height(), &dcCompatible, 0, 0, SRCCOPY);*/
 
 	//return CFormView::OnEraseBkgnd(pDC);
-	return TRUE;
+	return TRUE;//屏蔽背景刷新
 }
 
 
@@ -253,15 +250,20 @@ void CMyFormView1::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 
+	//动态绘制轮廓，每100ms绘制一次
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
-	if (cf->sentship[0] != "") {
+	if (cf->m_sentship[0] != "") {
 
 		double dspeed;
-		dspeed = ((double)cf->sp_slider.GetPos() - 5) * 0.1 * 1000 / 3600;
-		dcours += ((double)cf->cous_slider.GetPos() - 8)*dspeed;
+		dspeed = (25.0 - (double)cf->sp_slider.GetPos()) * 0.1 * 1000 / 3600;
+		dcours += ((cf->cous_slider.GetPos() - 80)/10.0)*dspeed;
+		if (dcours<0)
+		{
+			dcours += 360;
+		}
 		if (dcours > 360||dcours==360) {
-			dcours -= 360;
+			dcours -= 360.0;
 		}
 		dx += sin(dcours * 3.14159 / 180) * dspeed;
 		dy += cos(dcours * 3.14159 / 180) * dspeed;
@@ -285,7 +287,7 @@ void CMyFormView1::OnInitialUpdate()
 }
 
 
-void CMyFormView1::resetval(bool i)
+void CMyFormView1::m_resetval(bool i)
 {
 	// TODO: 在此处添加实现代码.
 
@@ -294,6 +296,7 @@ void CMyFormView1::resetval(bool i)
 	dcours = 0;
 	scale = 0.5;
 	linepoint.clear();
+	//结束上一计时周期，开始新的计时
 	KillTimer(1);
 	if (i) {
 		SetTimer(1, 100, NULL);
@@ -304,9 +307,11 @@ void CMyFormView1::resetval(bool i)
 BOOL CMyFormView1::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	//实现鼠标控制船舶大小
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
-	if (cf->sentship[0] != "") {
+	if (cf->m_sentship[0] != "") {
 		if (zDelta > 0) {
 			scale += 0.2;
 		}

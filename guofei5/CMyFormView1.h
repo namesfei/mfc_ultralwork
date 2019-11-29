@@ -34,14 +34,14 @@ public:
 //	CDC dcMem;
 
 	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	afx_msg void OnBnClickedButton1();
+//	afx_msg void OnBnClickedButton1();
 //	afx_msg void OnPaint();
 	virtual void OnDraw(CDC* /*pDC*/);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 //	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	virtual void OnInitialUpdate();
-	void resetval(bool);
+	void m_resetval(bool);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 };
 

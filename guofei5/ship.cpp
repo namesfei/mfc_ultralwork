@@ -26,6 +26,18 @@ Ship::Ship(sta_shipdata stdat)
 	pm_sta_shipdata->displacement = stdat.displacement;
 	pm_dy_shipdata->course = 0;
 	pm_dy_shipdata->speed = 0;
+	//³õÊ¼»¯ÂÖÀª
+	pm_dy_shipdata->ship_profile[0].x = -0.5 * pm_sta_shipdata->width;
+	pm_dy_shipdata->ship_profile[0].y = -0.5 * pm_sta_shipdata->length;
+	pm_dy_shipdata->ship_profile[1].x = 0.5 * pm_sta_shipdata->width;
+	pm_dy_shipdata->ship_profile[1].y = -0.5 * pm_sta_shipdata->length;
+	pm_dy_shipdata->ship_profile[2].x = 0.5 * pm_sta_shipdata->width;
+	pm_dy_shipdata->ship_profile[2].y = 0.2 * pm_sta_shipdata->length;
+	pm_dy_shipdata->ship_profile[3].x = 0;
+	pm_dy_shipdata->ship_profile[3].y = pm_sta_shipdata->length * 0.5;
+	pm_dy_shipdata->ship_profile[4].x = -0.5 * pm_sta_shipdata->width;
+	pm_dy_shipdata->ship_profile[4].y = 0.2 * pm_sta_shipdata->length;
+
 
 }
 

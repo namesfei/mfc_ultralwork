@@ -13,6 +13,7 @@
 
 static double dx = 0, dy = 0,dcours=0;
 static vector<vector<double>> linepoint;
+double scale = 0.5;
 IMPLEMENT_DYNCREATE(CMyFormView1, CFormView)
 
 CMyFormView1::CMyFormView1()
@@ -37,6 +38,7 @@ BEGIN_MESSAGE_MAP(CMyFormView1, CFormView)
 ON_WM_ERASEBKGND()
 //ON_WM_CTLCOLOR()
 ON_WM_TIMER()
+ON_WM_MOUSEWHEEL()
 END_MESSAGE_MAP()
 
 
@@ -152,11 +154,11 @@ void CMyFormView1::OnDraw(CDC* pDC)
 
 		Ship myship(shipdata);
 		myship.set_position(38.918055 + dy / 111000,121.630964+dx/1000000);
-		myship.set_ship_profile();
+		//myship.set_ship_profile();
 		double course = (double)cf->cous_slider.GetPos()-8;
 		myship.set_course(dcours);
 		myship.set_speed((double)cf->sp_slider.GetPos()-5);
-
+		myship.set_ship_profile_byscale(scale);
 		//显示动态信息
 		CString str, strcous, strspe, strpos("船舶位置：");
 		strcous.Format(TEXT("航向：%.3f°"), myship.outdm()->course);
@@ -178,7 +180,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 		//显示船舶信息
 		double cx = 100;//调整起始位置
 		double cy = 600;
-		double scale = 0.5;
+		//double scale = 0.5;
 		/*CString ddd;
 		ddd.Format(_T("%f"), dx);
 		MessageBox(ddd);*/
@@ -186,12 +188,12 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			CPen pNewPen;
 			pNewPen.CreatePen(PS_SOLID, 2, RGB(rand() % 255, rand() % 255, i*20 % 255)); // 随机色
 			CPen* poldPen = dcMem.SelectObject(&pNewPen);
-			dcMem.MoveTo(int(myship.outdm()->ship_profile[i].x * scale + cx + dx), int(-myship.outdm()->ship_profile[i].y * scale + cy - dy));
+			dcMem.MoveTo(int(myship.outdm()->ship_profile[i].x + cx + dx), int(-myship.outdm()->ship_profile[i].y + cy - dy));
 			if (4 == i) {
-				dcMem.LineTo(int(myship.outdm()->ship_profile[0].x * scale + cx + dx), int(-myship.outdm()->ship_profile[0].y * scale + cy - dy));
+				dcMem.LineTo(int(myship.outdm()->ship_profile[0].x + cx + dx), int(-myship.outdm()->ship_profile[0].y + cy - dy));
 			}
 			else {
-				dcMem.LineTo(int(myship.outdm()->ship_profile[i + 1].x * scale + cx + dx), int(-myship.outdm()->ship_profile[i + 1].y * scale + cy - dy));
+				dcMem.LineTo(int(myship.outdm()->ship_profile[i + 1].x + cx + dx), int(-myship.outdm()->ship_profile[i + 1].y + cy - dy));
 			}
 		}
 		//画轨迹
@@ -290,9 +292,33 @@ void CMyFormView1::resetval(bool i)
 	dx = 0;
 	dy = 0;
 	dcours = 0;
+	scale = 0.5;
 	linepoint.clear();
 	KillTimer(1);
 	if (i) {
 		SetTimer(1, 100, NULL);
 	}
+}
+
+
+BOOL CMyFormView1::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
+	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
+	if (cf->sentship[0] != "") {
+		if (zDelta > 0) {
+			scale += 0.2;
+		}
+		else {
+			scale -= 0.2;
+			if (scale < 0 || scale == 0) {
+				scale = 0.2;
+			}
+		}
+		Invalidate();
+	}
+
+
+	return CFormView::OnMouseWheel(nFlags, zDelta, pt);
 }

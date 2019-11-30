@@ -1,4 +1,4 @@
-ï»¿// CMyFormView0.cpp: å®ç°æ–‡ä»¶
+// CMyFormView0.cpp: ÊµÏÖÎÄ¼ş
 //
 
 #include "pch.h"
@@ -9,8 +9,8 @@
 #include<vector>
 #include"guofei5Dlg.h"
 #include<string>
-static vector<sta_shipdata> v_ship; //ä¿å­˜æ‰€æœ‰èˆ¹èˆ¶ä¿¡æ¯
-static string strtemp; //ä¸´æ—¶ä¿å­˜å­—ç¬¦ä¸²
+static vector<sta_shipdata> v_ship; //±£´æËùÓĞ´¬²°ĞÅÏ¢
+static string strtemp; //ÁÙÊ±±£´æ×Ö·û´®
 // CMyFormView0
 
 IMPLEMENT_DYNCREATE(CMyFormView0, CFormView)
@@ -60,7 +60,7 @@ BEGIN_MESSAGE_MAP(CMyFormView0, CFormView)
 END_MESSAGE_MAP()
 
 
-// CMyFormView0 è¯Šæ–­
+// CMyFormView0 Õï¶Ï
 
 #ifdef _DEBUG
 void CMyFormView0::AssertValid() const
@@ -77,17 +77,17 @@ void CMyFormView0::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
-// CMyFormView0 æ¶ˆæ¯å¤„ç†ç¨‹åº
+// CMyFormView0 ÏûÏ¢´¦Àí³ÌĞò
 
 
 void CMyFormView0::OnEnChangeEdit1()
 {
-	// TODO:  å¦‚æœè¯¥æ§ä»¶æ˜¯ RICHEDIT æ§ä»¶ï¼Œå®ƒå°†ä¸
-	// å‘é€æ­¤é€šçŸ¥ï¼Œé™¤éé‡å†™ CFormView::OnInitDialog()
-	// å‡½æ•°å¹¶è°ƒç”¨ CRichEditCtrl().SetEventMask()ï¼Œ
-	// åŒæ—¶å°† ENM_CHANGE æ ‡å¿—â€œæˆ–â€è¿ç®—åˆ°æ©ç ä¸­ã€‚
+	// TODO:  Èç¹û¸Ã¿Ø¼şÊÇ RICHEDIT ¿Ø¼ş£¬Ëü½«²»
+	// ·¢ËÍ´ËÍ¨Öª£¬³ı·ÇÖØĞ´ CFormView::OnInitDialog()
+	// º¯Êı²¢µ÷ÓÃ CRichEditCtrl().SetEventMask()£¬
+	// Í¬Ê±½« ENM_CHANGE ±êÖ¾¡°»ò¡±ÔËËãµ½ÑÚÂëÖĞ¡£
 
-	// TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
+	// TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
 	
 }
 
@@ -96,26 +96,26 @@ void CMyFormView0::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
 
-	// TODO: åœ¨æ­¤æ·»åŠ ä¸“ç”¨ä»£ç å’Œ/æˆ–è°ƒç”¨åŸºç±»
+	// TODO: ÔÚ´ËÌí¼Ó×¨ÓÃ´úÂëºÍ/»òµ÷ÓÃ»ùÀà
 
-	//æ·»åŠ ä¸¤æ¡é»˜è®¤èˆ¹èˆ¶ä¿¡æ¯
-	sta_shipdata mship = { "é˜³å…‰",{'1','2','3','4','5','6','7','8','9','\0'}, {'8','8','8','8','\0'},90,18,5,2000 };
-	sta_shipdata mship1= { "æ³°å¦å°¼å…‹",{'1','2','2','9','5','8','7','8','9','\0'}, {'4','5','6','7','\0'},90,18,5,2000 };
+	//Ìí¼ÓÁ½ÌõÄ¬ÈÏ´¬²°ĞÅÏ¢
+	sta_shipdata mship = { "Ñô¹â",{'1','2','3','4','5','6','7','8','9','\0'}, {'8','8','8','8','\0'},90,18,5,2000 };
+	sta_shipdata mship1= { "Ì©Ì¹Äá¿Ë",{'1','2','2','9','5','8','7','8','9','\0'}, {'4','5','6','7','\0'},100,30,5,2000 };
 	v_ship.push_back(mship);
 	v_ship.push_back(mship1);
 
-	//å¾€ä¸‹æ‹‰æ¡†å¡«å……èˆ¹èˆ¶ä¿¡æ¯
+	//ÍùÏÂÀ­¿òÌî³ä´¬²°ĞÅÏ¢
 	CString str;
 	str = v_ship[0].name;
 	selectship.AddString(str);
 	str = v_ship[1].name;
 	selectship.AddString(str);
 	
-	//é™å®šå­—ç¬¦è¾“å…¥é•¿åº¦
+	//ÏŞ¶¨×Ö·ûÊäÈë³¤¶È
 	i_num.SetLimitText(4);
 	i_mmsi.SetLimitText(9);
 
-	//è®¾ç½®æ»‘å—åˆå§‹åŒ–
+	//ÉèÖÃ»¬¿é³õÊ¼»¯
 	sp_slider.SetRange(0, 30);
 	sp_slider.SetTicFreq(1);
 	sp_slider.SetPos(25);
@@ -127,16 +127,16 @@ void CMyFormView0::OnInitialUpdate()
 
 void CMyFormView0::OnCbnSelchangeCombo1()
 {
-	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
-	//å¤ä½slider
+	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	//¸´Î»slider
 	sp_slider.EnableWindow(); cous_slider.EnableWindow();
 	sp_slider.SetPos(25); cous_slider.SetPos(80);
 	delet_button.EnableWindow();
-	//æ£€æµ‹å½“å‰ä¸‹æ‹‰æ¡†é€‰æ‹©å†…å®¹
+	//¼ì²âµ±Ç°ÏÂÀ­¿òÑ¡ÔñÄÚÈİ
 	int index = selectship.GetCurSel();
 	CString str;
 	selectship.GetLBText(index, str);
-	//è¾“å‡ºç›¸åº”èˆ¹åªå†…å®¹
+	//Êä³öÏàÓ¦´¬Ö»ÄÚÈİ
 	CString strname, strnum, strmmsi, strlen, strwid, strdraf, strdisp;
 	for (auto i : v_ship) {
 
@@ -146,10 +146,10 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 			strname = i.name;
 			strnum = i.number;
 			strmmsi = i.MMSI;
-			strlen.Format(_T("%.3fç±³"), i.length);
-			strwid.Format(_T("%.3fç±³"), i.width);
-			strdraf.Format(_T("%.3fç±³"), i.draft);
-			strdisp.Format(_T("%.3få¨"), i.displacement);
+			strlen.Format(_T("%.3fÃ×"), i.length);
+			strwid.Format(_T("%.3fÃ×"), i.width);
+			strdraf.Format(_T("%.3fÃ×"), i.draft);
+			strdisp.Format(_T("%.3f¶Ö"), i.displacement);
 			o_name.SetWindowTextW(strname);
 			o_num.SetWindowTextW(strnum);
 			o_mmsi.SetWindowTextW(strmmsi);
@@ -157,14 +157,14 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 			o_wid.SetWindowTextW(strwid);
 			o_draf.SetWindowTextW(strdraf);
 			o_disp.SetWindowTextW(strdisp);
-			//å°†ä¿¡æ¯æ‰“åŒ…ï¼Œåœ¨view1ä¸­ä½¿ç”¨
+			//½«ĞÅÏ¢´ò°ü£¬ÔÚview1ÖĞÊ¹ÓÃ
 			memcpy(&m_tempship, &i, sizeof(i));
 
 
 		}
 	}
 
-	//é‡ç½®view1æ˜¾ç¤ºå†…å®¹
+	//ÖØÖÃview1ÏÔÊ¾ÄÚÈİ
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView1* cf1= (CMyFormView1*)pdlg->m_cSplitter.GetPane(0, 1);
 	cf1->m_resetval(1);
@@ -175,9 +175,9 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 
 void CMyFormView0::OnBnClickedButton2()
 {
-	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
+	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
 	
-	//å®ç°æ·»åŠ èˆ¹åª
+	//ÊµÏÖÌí¼Ó´¬Ö»
 	CString strname, strnum, strmmsi, strlen, strwid, strdraf, strdisp;
 	i_name.GetWindowTextW(strname);
 	i_num.GetWindowTextW(strnum);
@@ -189,12 +189,12 @@ void CMyFormView0::OnBnClickedButton2()
 
 	if (strname.IsEmpty() || strnum.IsEmpty() || strmmsi.IsEmpty() || strlen.IsEmpty() || strwid.IsEmpty() || strdraf.IsEmpty() || strdisp.IsEmpty()) {
 	
-		MessageBox(_T("è¯·è¾“å…¥æ­£ç¡®æ•°æ®"));
+		MessageBox(_T("ÇëÊäÈëÕıÈ·Êı¾İ"));
 	}
 	else {
 		sta_shipdata addship;
 
-		strtemp = CStringA(strname);//CStringAæ˜¯Ansiçš„CString
+		strtemp = CStringA(strname);//CStringAÊÇAnsiµÄCString
 		addship.name = strtemp.c_str();
 
 		//char temp[0x100]="0";
@@ -213,16 +213,16 @@ void CMyFormView0::OnBnClickedButton2()
 
 		//USES_CONVERSION;
 		//addship.name = T2A(strname);
-		//int n = strnum.GetLength(); //è·å–strçš„å­—ç¬¦æ•°  
+		//int n = strnum.GetLength(); //»ñÈ¡strµÄ×Ö·ûÊı  
 		//int len = WideCharToMultiByte(CP_ACP, 0, strnum, n, NULL, 0, NULL, NULL);
 		//WideCharToMultiByte(CP_ACP, 0, strnum, n, addship.number, len, NULL, NULL);
 		//addship.number[len + 1] = '\0';
 		//n = strmmsi.GetLength();
 		//len = WideCharToMultiByte(CP_ACP, 0, strmmsi, n, NULL, 0, NULL, NULL);
 		//WideCharToMultiByte(CP_ACP, 0, strmmsi, n, addship.MMSI, len, NULL, NULL);
-		//addship.name = "éƒ­é£";
-		     ////å­—ç¬¦è½¬æ¢æ–¹æ³•2
-		//int n = strnum.GetLength(); //è·å–strçš„å­—ç¬¦æ•°  
+		//addship.name = "¹ù·É";
+		     ////×Ö·û×ª»»·½·¨2
+		//int n = strnum.GetLength(); //»ñÈ¡strµÄ×Ö·ûÊı  
 		//int len = WideCharToMultiByte(CP_ACP, 0, strnum, n, NULL, 0, NULL, NULL);
 		//WideCharToMultiByte(CP_ACP, 0, strnum, n, addship.number, len, NULL, NULL);
 		//addship.number[len + 1] = '\0';
@@ -235,11 +235,11 @@ void CMyFormView0::OnBnClickedButton2()
 		addship.width = float(_ttof(strwid));
 		addship.draft =float(_ttof(strdraf));
 		addship.displacement= float(_ttof(strdisp));
-		//strname = "éƒ­";
+		//strname = "¹ù";
 		v_ship.push_back(addship);
 		selectship.AddString(strname);
-		//ç½®ç©ºç¼–è¾‘æ¡†
-		MessageBox(_T("æ·»åŠ æˆåŠŸ"));
+		//ÖÃ¿Õ±à¼­¿ò
+		MessageBox(_T("Ìí¼Ó³É¹¦"));
 		i_name.SetWindowTextW(_T(""));
 		i_num.SetWindowTextW(_T(""));
 		i_mmsi.SetWindowTextW(_T(""));
@@ -255,9 +255,9 @@ void CMyFormView0::OnBnClickedButton2()
 
 void CMyFormView0::OnBnClickedButton1()
 {
-	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
+	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
 
-	//å®Œæˆåˆ é™¤èˆ¹èˆ¶åŠŸèƒ½
+	//Íê³ÉÉ¾³ı´¬²°¹¦ÄÜ
 	if (v_ship.size()) {
 		int index = selectship.GetCurSel();
 		CString str;
@@ -284,20 +284,20 @@ void CMyFormView0::OnBnClickedButton1()
 		o_wid.SetWindowTextW(_T(""));
 		o_draf.SetWindowTextW(_T(""));
 		o_disp.SetWindowTextW(_T(""));
-		MessageBox(_T("å·²åˆ é™¤ï¼"));
+		MessageBox(_T("ÒÑÉ¾³ı£¡"));
 	}
 	else
 	{
-		MessageBox(_T("å·²åˆ é™¤æ‰€æœ‰ï¼"));
+		MessageBox(_T("ÒÑÉ¾³ıËùÓĞ£¡"));
 	}
 }
 
 
 void CMyFormView0::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	// TODO: åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
+	// TODO: ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
 
-	//æ»‘åŠ¨æ¡æ»šåŠ¨ï¼Œåˆ·æ–°è§†å›¾çª—å£
+	//»¬¶¯Ìõ¹ö¶¯£¬Ë¢ĞÂÊÓÍ¼´°¿Ú
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	pdlg->m_cSplitter.GetPane(0, 1)->Invalidate();
 
@@ -307,9 +307,9 @@ void CMyFormView0::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CMyFormView0::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	// TODO: åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
+	// TODO: ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
 
-	//æ»‘åŠ¨æ¡æ»šåŠ¨ï¼Œåˆ·æ–°è§†å›¾çª—å£
+	//»¬¶¯Ìõ¹ö¶¯£¬Ë¢ĞÂÊÓÍ¼´°¿Ú
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	pdlg->m_cSplitter.GetPane(0, 1)->Invalidate();
 
@@ -320,6 +320,6 @@ void CMyFormView0::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 void CMyFormView0::OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
+	// TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
 	*pResult = 0;
 }

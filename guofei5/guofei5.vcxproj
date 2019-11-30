@@ -187,6 +187,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CEditEx.h" />
     <ClInclude Include="CMyFormView0.h" />
     <ClInclude Include="CMyFormView1.h" />
     <ClInclude Include="framework.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CEditEx.cpp" />
     <ClCompile Include="CMyFormView0.cpp" />
     <ClCompile Include="CMyFormView1.cpp" />
     <ClCompile Include="guofei5.cpp" />

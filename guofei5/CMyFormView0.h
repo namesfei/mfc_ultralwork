@@ -1,6 +1,6 @@
 ﻿#pragma once
-
-
+#include "ship.h"
+#include "CEditEx.h"
 // CMyFormView0 窗体视图
 class CMyFormView0 : public CFormView
 {
@@ -44,15 +44,15 @@ private:
 	CEdit i_name;
 	CEdit i_num;
 	CEdit i_mmsi;
-	CEdit i_len;
-	CEdit i_wid;
-	CEdit i_draft;
-	CEdit i_disp;
+	CEditEx i_len;
+	CEditEx i_wid;
+	CEditEx i_draft;
+	CEditEx i_disp;
 public:
 	afx_msg void OnBnClickedButton2();
 	afx_msg void OnBnClickedButton1();
 public:
-	CString m_sentship[7];  //传递船舶信息
+	sta_shipdata m_tempship; //传递船舶信息
 	CSliderCtrl sp_slider;
 	CSliderCtrl cous_slider;
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);

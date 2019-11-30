@@ -3,9 +3,9 @@
 
 #include "pch.h"
 #include "guofei5.h"
+#include "ship.h"
 #include "CMyFormView0.h"
 #include "CMyFormView1.h"
-#include "ship.h"
 #include<vector>
 #include"guofei5Dlg.h"
 #include<string>
@@ -18,6 +18,7 @@ IMPLEMENT_DYNCREATE(CMyFormView0, CFormView)
 CMyFormView0::CMyFormView0()
 	: CFormView(IDD_DIALOG1)
 {
+	m_tempship =  { "",{'\0'}, {'\0'},0,0,0,0 };
 }
 
 CMyFormView0::~CMyFormView0()
@@ -157,19 +158,9 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 			o_draf.SetWindowTextW(strdraf);
 			o_disp.SetWindowTextW(strdisp);
 			//将信息打包，在view1中使用
-			CString strtemp;
-			m_sentship[0] = strname;
-			m_sentship[1] = strnum;
-			m_sentship[2] = strmmsi;
-			strtemp.Format(_T("%.3f"), i.length);
-			m_sentship[3] = strtemp;
-			strtemp.Format(_T("%.3f"), i.width);
-			m_sentship[4] = strtemp;
-			strtemp.Format(_T("%.3f"), i.draft);
-			m_sentship[5] = strtemp;
-			strtemp.Format(_T("%.3f"), i.displacement);
-			m_sentship[6] = strtemp;
-			//
+			memcpy(&m_tempship, &i, sizeof(i));
+
+
 		}
 	}
 

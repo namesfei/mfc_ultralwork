@@ -118,15 +118,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
 	sta_shipdata shipdata;
-	//strtemp = CStringA(strname);//CStringA是Ansi的CString
-	string str = CStringA(cf->m_sentship[0]);
-	shipdata.name = str.c_str();
-	strcpy_s(shipdata.number, CStringA(cf->m_sentship[1]));
-	strcpy_s(shipdata.MMSI, CStringA(cf->m_sentship[2]));
-	shipdata.length = float(_ttof(cf->m_sentship[3]));
-	shipdata.width = float(_ttof(cf->m_sentship[4]));
-	shipdata.draft = float(_ttof(cf->m_sentship[5]));
-	shipdata.displacement = float(_ttof(cf->m_sentship[6]));
+	memcpy(&shipdata, &cf->m_tempship, sizeof(cf->m_tempship));
 
 	//双缓冲绘图
 	CPoint ptCenter;
@@ -153,7 +145,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	dcMem.SelectObject(pOldBrush);
 
 	//检测船舶选择，绘制船舶轮廓
-	if (cf->m_sentship[0]!="") {
+	if (shipdata.length) {
 
 		Ship myship(shipdata);
 		myship.set_position(38.918055 + dy / 111000,121.630964+dx/1000000);
@@ -168,7 +160,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 		strspe.Format(TEXT("速度：%.3fKm/h"), myship.outdm()->speed);
 		str.Format(_T("%.6f"), myship.outdm()->latitude); strpos += str; strpos += "° ";
 		//strpos.Format(TEXT("船舶位置：%.3f°"), myship.outsm()->width);
-		if (myship.outdm()->latitude < 0)
+		if (cf->m_tempship.name != "")
 			strpos += "S   ";
 		else
 			strpos += "N   ";
@@ -253,11 +245,11 @@ void CMyFormView1::OnTimer(UINT_PTR nIDEvent)
 	//动态绘制轮廓，每100ms绘制一次
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
-	if (cf->m_sentship[0] != "") {
+	if (cf->m_tempship.name != "") {
 
 		double dspeed;
 		dspeed = (25.0 - (double)cf->sp_slider.GetPos()) * 0.1 * 1000 / 3600;
-		dcours += ((cf->cous_slider.GetPos() - 80)/10.0)*dspeed;
+		dcours += (((double)cf->cous_slider.GetPos() - 80)/10.0)*dspeed;
 		if (dcours<0)
 		{
 			dcours += 360;
@@ -311,7 +303,7 @@ BOOL CMyFormView1::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	//实现鼠标控制船舶大小
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
-	if (cf->m_sentship[0] != "") {
+	if (cf->m_tempship.name != "") {
 		if (zDelta > 0) {
 			scale += 0.2;
 		}

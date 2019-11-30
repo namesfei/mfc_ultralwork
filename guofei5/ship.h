@@ -1,4 +1,4 @@
-﻿
+﻿#pragma once
 //#include<iostream>
 using namespace std;
 struct sta_shipdata 

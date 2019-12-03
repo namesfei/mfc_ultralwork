@@ -37,8 +37,8 @@ Ship::Ship(sta_shipdata stdat)
 	pm_dy_shipdata->ship_profile[3].y = pm_sta_shipdata->length * 0.5;
 	pm_dy_shipdata->ship_profile[4].x = -0.5 * pm_sta_shipdata->width;
 	pm_dy_shipdata->ship_profile[4].y = 0.2 * pm_sta_shipdata->length;
-
-
+	pm_dy_shipdata->ship_profile[5].x = 0;
+	pm_dy_shipdata->ship_profile[5].y = 0.5*pm_sta_shipdata->length;
 }
 
 Ship::~Ship()
@@ -85,10 +85,12 @@ void Ship::set_ship_profile()
 	pm_dy_shipdata->ship_profile[3].y = pm_sta_shipdata->length * 0.5;
 	pm_dy_shipdata->ship_profile[4].x = -0.5 * pm_sta_shipdata->width;
 	pm_dy_shipdata->ship_profile[4].y = 0.2 * pm_sta_shipdata->length;
+	pm_dy_shipdata->ship_profile[5].x = 0;
+	pm_dy_shipdata->ship_profile[5].y = 0.5*pm_sta_shipdata->length;
 }
 void Ship:: dy_set_profile()
 {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		double x = pm_dy_shipdata->ship_profile[i].x;
 		double y = pm_dy_shipdata->ship_profile[i].y;
 		pm_dy_shipdata->ship_profile[i].x = sin(pm_dy_shipdata->course*3.14/180)*y+cos(pm_dy_shipdata->course * 3.14 / 180)*x;
@@ -97,7 +99,7 @@ void Ship:: dy_set_profile()
 }
 void Ship::set_ship_profile_byscale(double scale) 
 {
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 6; i++) {
 		pm_dy_shipdata->ship_profile[i].x *= scale;
 		pm_dy_shipdata->ship_profile[i].y *= scale;
 	}
@@ -172,4 +174,11 @@ double Ship::ca_fangwei(double lati, double longi)
 	if (brng < 0)
 		brng = brng + 360;
 	return brng;
+}
+
+
+void Ship::set_shiliang(double shiliang)
+{
+	// TODO: 在此处添加实现代码.
+	pm_dy_shipdata->ship_profile[5].y += shiliang;
 }

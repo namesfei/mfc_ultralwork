@@ -14,6 +14,8 @@
 static double dx = 0, dy = 0,dcours=0;
 static vector<vector<double>> linepoint;
 double scale = 0.5;
+double shiliang = 0;
+
 IMPLEMENT_DYNCREATE(CMyFormView1, CFormView)
 
 CMyFormView1::CMyFormView1()
@@ -148,9 +150,10 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	if (shipdata.length) {
 
 		Ship myship(shipdata);
-		myship.set_position(38.918055 + dy / 111000,121.630964+dx/1000000);
+		myship.set_position(38.918055 + dy*8 / 111000,121.630964+dx*8/1000000);
 		//myship.set_ship_profile();
 		double course = (double)cf->cous_slider.GetPos()-8.0;
+		myship.set_shiliang(shiliang);
 		myship.set_course(dcours);
 		myship.set_speed(25.0 - (double)cf->sp_slider.GetPos());
 		myship.set_ship_profile_byscale(scale);
@@ -176,6 +179,8 @@ void CMyFormView1::OnDraw(CDC* pDC)
 		double cx = 100;//调整起始位置
 		double cy = 600;
 		//绘制船舶轮廓
+		dcMem.MoveTo(int(myship.outdm()->ship_profile[3].x + cx + dx), int(-myship.outdm()->ship_profile[3].y + cy - dy));
+		dcMem.LineTo(int(myship.outdm()->ship_profile[5].x + cx + dx), int(-myship.outdm()->ship_profile[5].y + cy - dy));
 		for (int i = 0; i < 5; i++) {
 			CPen pNewPen;
 			pNewPen.CreatePen(PS_SOLID, 2, RGB(rand() % 255, rand() % 255, i*20 % 255)); // 随机色
@@ -250,6 +255,7 @@ void CMyFormView1::OnTimer(UINT_PTR nIDEvent)
 		double dspeed;
 		dspeed = (25.0 - (double)cf->sp_slider.GetPos()) * 0.1 * 1000 / 3600;
 		dcours += (((double)cf->cous_slider.GetPos() - 80)/10.0)*dspeed;
+		shiliang = dspeed * 60*10;//一分钟后的船舶矢量
 		if (dcours<0)
 		{
 			dcours += 360;
@@ -288,6 +294,7 @@ void CMyFormView1::m_resetval(bool i)
 	dcours = 0;
 	scale = 0.5;
 	linepoint.clear();
+	shiliang = 0;
 	//结束上一计时周期，开始新的计时
 	KillTimer(1);
 	if (i) {

@@ -19,7 +19,7 @@ struct zuobiao
 };
 struct dy_shipdata
 {
-	zuobiao ship_profile[5];
+	zuobiao ship_profile[6];
 	double speed;	// 千米/小时
 	double course;	// 正北为0°
 	double latitude; //北正南负
@@ -52,4 +52,6 @@ private:
 	//double course;	// 正北为0°
 	//double latitude; //北正南负
 	//double longitude;//东正西负
+public:
+	void set_shiliang(double);
 };

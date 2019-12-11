@@ -21,7 +21,7 @@ IMPLEMENT_DYNCREATE(CMyFormView1, CFormView)
 CMyFormView1::CMyFormView1()
 	: CFormView(IDD_DIALOG2)
 {
-
+	m_select = 0;
 }
 
 CMyFormView1::~CMyFormView1()
@@ -133,18 +133,18 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	//bmp.CreateCompatibleBitmap(&dcMem, rect.Width(), rect.Height());//创建兼容位图
 	bmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());//创建兼容位图
 	dcMem.SelectObject(&bmp);//将位图选择进内存DC
-	dcMem.FillSolidRect(rect, pDC->GetBkColor());//按原来背景填充客户区，不然会是黑色
+	dcMem.FillSolidRect(rect, RGB(152,211,237));//填充蓝色
 
 	//在内存中绘制
 	//绘制背景图
-	CBitmap bitmap;
-	bitmap.LoadBitmap(IDB_BITMAP1);   //这个IDB_BITMAP1要自己添加
-	CBrush  brush;
-	brush.CreatePatternBrush(&bitmap);
-	CBrush* pOldBrush = dcMem.SelectObject(&brush);
-	GetClientRect(&rect);
-	dcMem.Rectangle(0, 0, rect.Width(), rect.Height());  // 这些参数可以调整图片添加位置和大小
-	dcMem.SelectObject(pOldBrush);
+	//CBitmap bitmap;
+	//bitmap.LoadBitmap(IDB_BITMAP1);   //这个IDB_BITMAP1要自己添加
+	//CBrush  brush;
+	//brush.CreatePatternBrush(&bitmap);
+	//CBrush* pOldBrush = dcMem.SelectObject(&brush);
+	//GetClientRect(&rect);
+	//dcMem.Rectangle(0, 0, rect.Width(), rect.Height());  // 这些参数可以调整图片添加位置和大小
+	//dcMem.SelectObject(pOldBrush);
 
 	//检测船舶选择，绘制船舶轮廓
 	if (shipdata.length) {
@@ -175,6 +175,9 @@ void CMyFormView1::OnDraw(CDC* pDC)
 		dcMem.TextOutW(0, 40, strcous);
 		dcMem.TextOutW(0, 70, strspe);
 		dcMem.TextOutW(0, 100, strpos);
+		CString ss;
+		ss.Format(_T("%d"), m_select);
+		dcMem.TextOutW(1, 130, ss);
 		//显示船舶信息
 		double cx = 100;//调整起始位置
 		double cy = 600;

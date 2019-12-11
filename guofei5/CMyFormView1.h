@@ -43,6 +43,8 @@ public:
 	virtual void OnInitialUpdate();
 	void m_resetval(bool);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+public:
+	int m_select;	//选择菜单栏选项
 };
 
 

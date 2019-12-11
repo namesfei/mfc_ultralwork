@@ -78,6 +78,11 @@ BEGIN_MESSAGE_MAP(Cguofei5Dlg, CDialogEx)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
 	ON_WM_SIZE()
+	ON_COMMAND(ID_UU32771, &Cguofei5Dlg::OnUu32771)
+	ON_COMMAND(ID_LAND, &Cguofei5Dlg::Onland)
+	ON_COMMAND(ID_LINE, &Cguofei5Dlg::Online)
+	ON_COMMAND(ID_Pland, &Cguofei5Dlg::OnPland)
+	ON_COMMAND(ID_Pline, &Cguofei5Dlg::OnPline)
 END_MESSAGE_MAP()
 
 
@@ -113,7 +118,8 @@ BOOL Cguofei5Dlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
+	m_menu.LoadMenu(IDR_MENU1);  //  IDR_MENU1	
+	SetMenu(&m_menu);
 	//CRect cRect;
 	//GetWindowRect(&cRect);
 	//ScreenToClient(&cRect);
@@ -198,7 +204,7 @@ int Cguofei5Dlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_cSplitter.CreateStatic(m_pMyFrame, 1, 2); //在Frame里切分视图窗口为1×2，就是一行两列
 	m_cSplitter.CreateView(0, 0, RUNTIME_CLASS(CMyFormView0), CSize(450, 700), NULL);//第一行一列
 	m_cSplitter.CreateView(0, 1, RUNTIME_CLASS(CMyFormView1), CSize(550, 700), NULL);//第一行二列
-
+	
 	
 	return 0;
 }
@@ -224,4 +230,44 @@ void Cguofei5Dlg::OnSize(UINT nType, int cx, int cy)
 	m_pMyFrame->MoveWindow(&cRect);
 	m_pMyFrame->ShowWindow(SW_SHOW);
 
+}
+
+
+void Cguofei5Dlg::OnUu32771()
+{
+	// TODO: 在此添加命令处理程序代码
+	MessageBox(_T("guofei"));
+}
+
+
+void Cguofei5Dlg::Onland()
+{
+	// TODO: 在此添加命令处理程序代码
+
+	CMyFormView1* cf1=(CMyFormView1*)m_cSplitter.GetPane(0, 1);
+	cf1->m_select=1;
+}
+
+
+void Cguofei5Dlg::Online()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);
+	cf1->m_select = 2;
+}
+
+
+void Cguofei5Dlg::OnPland()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);
+	cf1->m_select = 3;
+}
+
+
+void Cguofei5Dlg::OnPline()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);
+	cf1->m_select = 4;
 }

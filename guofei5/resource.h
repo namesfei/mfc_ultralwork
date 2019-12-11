@@ -10,6 +10,7 @@
 #define IDD_DIALOG1                     129
 #define IDD_DIALOG2                     130
 #define IDB_BITMAP1                     134
+#define IDR_MENU1                       135
 #define IDC_LIST1                       1000
 #define IDC_EDIT1                       1001
 #define IDC_EDIT2                       1002
@@ -30,13 +31,23 @@
 #define IDC_EDIT12                      1017
 #define IDC_EDIT13                      1018
 #define IDC_EDIT14                      1019
+#define ID_UU32771                      32771
+#define ID_UU32772                      32772
+#define ID_32773                        32773
+#define ID_32774                        32774
+#define ID_Menu                         32775
+#define ID_32776                        32776
+#define ID_LAND                         32777
+#define ID_LINE                         32778
+#define ID_Pland                        32779
+#define ID_Pline                        32780
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        135
-#define _APS_NEXT_COMMAND_VALUE         32771
+#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_COMMAND_VALUE         32781
 #define _APS_NEXT_CONTROL_VALUE         1021
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

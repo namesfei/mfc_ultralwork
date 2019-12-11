@@ -42,4 +42,12 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 //public:
 	//sta_shipdata ff;
+private:
+	CMenu m_menu;
+public:
+	afx_msg void OnUu32771();
+	afx_msg void Onland();
+	afx_msg void Online();
+	afx_msg void OnPland();
+	afx_msg void OnPline();
 };

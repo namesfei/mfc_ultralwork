@@ -207,25 +207,27 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			strpos += "W";
 		else
 			strpos += "E";
-		dcMem.TextOutW(0, 40, strcous);
-		dcMem.TextOutW(0, 70, strspe);
-		dcMem.TextOutW(0, 100, strpos);
+		dcMem.TextOutW(0, 80, strcous);
+		dcMem.TextOutW(0, 110, strspe);
+		dcMem.TextOutW(0, 140, strpos);
 		//显示船舶信息
 		double cx = 100;//调整起始位置
 		double cy = 600;
+		double newx = cx + dx;
+		double newy = cy - dy;
 		//绘制船舶轮廓
-		dcMem.MoveTo(int(myship.outdm()->ship_profile[3].x + cx + dx), int(-myship.outdm()->ship_profile[3].y + cy - dy));
-		dcMem.LineTo(int(myship.outdm()->ship_profile[5].x + cx + dx), int(-myship.outdm()->ship_profile[5].y + cy - dy));
+		dcMem.MoveTo(int(myship.outdm()->ship_profile[3].x + newx), int(-myship.outdm()->ship_profile[3].y + newy));
+		dcMem.LineTo(int(myship.outdm()->ship_profile[5].x + newx), int(-myship.outdm()->ship_profile[5].y + newy));
 		for (int i = 0; i < 5; i++) {
 			CPen pNewPen;
 			pNewPen.CreatePen(PS_SOLID, 2, RGB(rand() % 255, rand() % 255, i*20 % 255)); // 随机色
 			CPen* poldPen = dcMem.SelectObject(&pNewPen);
-			dcMem.MoveTo(int(myship.outdm()->ship_profile[i].x + cx + dx), int(-myship.outdm()->ship_profile[i].y + cy - dy));
+			dcMem.MoveTo(int(myship.outdm()->ship_profile[i].x + newx), int(-myship.outdm()->ship_profile[i].y + newy));
 			if (4 == i) {
-				dcMem.LineTo(int(myship.outdm()->ship_profile[0].x + cx + dx), int(-myship.outdm()->ship_profile[0].y + cy - dy));
+				dcMem.LineTo(int(myship.outdm()->ship_profile[0].x + newx), int(-myship.outdm()->ship_profile[0].y + newy));
 			}
 			else {
-				dcMem.LineTo(int(myship.outdm()->ship_profile[i + 1].x + cx + dx), int(-myship.outdm()->ship_profile[i + 1].y + cy - dy));
+				dcMem.LineTo(int(myship.outdm()->ship_profile[i + 1].x + newx), int(-myship.outdm()->ship_profile[i + 1].y + newy));
 			}
 		}
 		//画轨迹
@@ -241,7 +243,14 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			for (auto i : linepoint) {
 				dcMem.LineTo((int)i[0], (int)i[1]);
 			}
-		}	
+		}
+		//判断碰撞
+		if (m_checkpeng(newx,newy,m_drawland)) {
+			//MessageBox(_T("碰撞！！！"));
+			dcours += 30;
+			//dx += 50;
+			//dy += 50;	
+		}
 	}
 	/*CBitmap bitmap;
 	bitmap.LoadBitmapW(IDB_BITMAP1);
@@ -468,3 +477,30 @@ void CMyFormView1::m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>>& vec, i
 //
 //	CFormView::OnChar(nChar, nRepCnt, nFlags);
 //}
+
+
+bool CMyFormView1::m_checkpeng(int x,int y, std::vector<std::vector<CPoint>> m_drawland)
+{
+	// TODO: 在此处添加实现代码.
+
+	int count=0;
+	for (auto i : m_drawland) {
+		if (i.size() >= 3) {
+			for (size_t j = 0; j < i.size(); ++j) {
+				if (y > min(i[j].y , (j != i.size() - 1 ? i[j + 1] : i[0]).y) && y <= max(i[j].y, (j != i.size() - 1 ? i[j + 1] : i[0]).y)&& x < max(i[j].x, (j != i.size() - 1 ? i[j + 1] : i[0]).x)) {
+					++count;
+				}
+			}
+			if (count % 2 != 0) {
+			return true;
+			}
+			////判断顺时针还是逆时针
+			//CPoint a, b;
+			//a = i[1] - i[0];
+			//b = i[2] - i[0];
+			//double sign=b.y*cos(atan(a.y / a.x)) - b.x*sin(atan(a.y/a.x));
+			
+		}
+	}
+	return false;
+}

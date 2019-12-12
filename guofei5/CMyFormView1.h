@@ -61,6 +61,7 @@ public:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	void m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>> &vec,int nwidth,COLORREF lineColor, COLORREF inColor);
 //	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+	bool m_checkpeng(int x, int y, std::vector<std::vector<CPoint>> m_drawland);
 };
 
 

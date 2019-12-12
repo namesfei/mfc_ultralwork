@@ -219,7 +219,10 @@
     <None Include="res\guofei5.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bitmap2.bmp" />
+    <Image Include="res\deng.bmp" />
     <Image Include="res\guofei5.ico" />
+    <Image Include="res\light.ico" />
     <Image Include="res\map.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

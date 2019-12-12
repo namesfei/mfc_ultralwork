@@ -50,4 +50,6 @@ public:
 	afx_msg void Online();
 	afx_msg void OnPland();
 	afx_msg void OnPline();
+	afx_msg void OnShatan();
+	afx_msg void Ondeng();
 };

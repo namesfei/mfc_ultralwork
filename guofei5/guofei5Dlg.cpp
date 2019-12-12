@@ -83,6 +83,8 @@ BEGIN_MESSAGE_MAP(Cguofei5Dlg, CDialogEx)
 	ON_COMMAND(ID_LINE, &Cguofei5Dlg::Online)
 	ON_COMMAND(ID_Pland, &Cguofei5Dlg::OnPland)
 	ON_COMMAND(ID_Pline, &Cguofei5Dlg::OnPline)
+	ON_COMMAND(ID_Shatan, &Cguofei5Dlg::OnShatan)
+	ON_COMMAND(ID_deng, &Cguofei5Dlg::Ondeng)
 END_MESSAGE_MAP()
 
 
@@ -266,6 +268,22 @@ void Cguofei5Dlg::OnPland()
 
 
 void Cguofei5Dlg::OnPline()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);
+	cf1->m_select = 4;
+}
+
+
+void Cguofei5Dlg::OnShatan()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);
+	cf1->m_select = 3;
+}
+
+
+void Cguofei5Dlg::Ondeng()
 {
 	// TODO: 在此添加命令处理程序代码
 	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);

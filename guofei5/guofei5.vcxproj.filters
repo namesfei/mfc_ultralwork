@@ -86,5 +86,14 @@
     <Image Include="res\map.bmp">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\deng.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\light.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

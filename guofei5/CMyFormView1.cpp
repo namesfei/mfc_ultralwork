@@ -22,6 +22,8 @@ CMyFormView1::CMyFormView1()
 	: CFormView(IDD_DIALOG2)
 {
 	m_select = 0;
+	m_countland=0;
+	m_countline=0;
 }
 
 CMyFormView1::~CMyFormView1()
@@ -41,6 +43,8 @@ ON_WM_ERASEBKGND()
 //ON_WM_CTLCOLOR()
 ON_WM_TIMER()
 ON_WM_MOUSEWHEEL()
+ON_WM_LBUTTONDOWN()
+ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -144,6 +148,26 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	//CBrush* pOldBrush = dcMem.SelectObject(&brush);
 	//GetClientRect(&rect);
 	//dcMem.Rectangle(0, 0, rect.Width(), rect.Height());  // 这些参数可以调整图片添加位置和大小
+	//dcMem.SelectObject(pOldBrush);
+
+	//绘制海图
+	
+	////绘制等深线
+	m_drawmap(dcMem, m_drawline, 1, RGB(136, 152, 139), RGB(123, 193, 241));
+
+	//绘制陆地
+	m_drawmap(dcMem, m_drawland, 3, RGB(95, 106, 96), RGB(203, 199, 131));
+
+	//绘制沙滩
+	m_drawmap(dcMem, m_drawbeach, 1, RGB(153, 112, 53), RGB(174, 160, 82));
+
+	//添加灯浮
+
+	HICON micon = AfxGetApp()->LoadIcon(IDI_ICON1);
+	for (auto i : m_deng) {
+		DrawIcon(dcMem, i.x, i.y, micon);
+	}
+	
 	//dcMem.SelectObject(pOldBrush);
 
 	//检测船舶选择，绘制船舶轮廓
@@ -328,4 +352,86 @@ BOOL CMyFormView1::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 
 	return CFormView::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+
+void CMyFormView1::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (m_select) {
+		if (4 == m_select) {
+			m_deng.push_back(point);
+			Invalidate();
+		}
+		else {
+			m_tempvct.push_back(point);
+			Invalidate();
+		}
+
+	}
+
+	CFormView::OnLButtonDown(nFlags, point);
+
+}
+
+
+void CMyFormView1::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (m_select) {
+		switch (m_select)
+		{
+		case 1:
+			m_drawland.push_back(m_tempvct);
+			m_tempvct.clear();
+			Invalidate();
+			break;
+		case 2:
+			m_drawline.push_back(m_tempvct);
+			m_tempvct.clear();
+			Invalidate();
+			break;
+		case 3:
+			m_drawbeach.push_back(m_tempvct);
+			m_tempvct.clear();
+			Invalidate();
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	CFormView::OnRButtonDown(nFlags, point);
+}
+
+
+void CMyFormView1::m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>>& vec, int nwidth, COLORREF lineColor, COLORREF inColor)
+{
+	// TODO: 在此处添加实现代码.
+	CPen mPen;
+	mPen.CreatePen(PS_SOLID, nwidth, lineColor);
+	CPen* poldPen0 = dcMem.SelectObject(&mPen);
+	for (size_t i = 0; i < m_tempvct.size(); ++i) {
+		dcMem.MoveTo(m_tempvct[i]);
+		if (i == m_tempvct.size() - 1) {
+			dcMem.LineTo(m_tempvct[0]);
+		}
+		else {
+			dcMem.LineTo(m_tempvct[i + 1]);
+		}
+
+	}
+	//填充
+	for (auto i : vec) {
+		CPoint pts[100];
+		for (size_t j = 0; j < i.size(); ++j) {
+			pts[j] = i[j];
+		}
+		CBrush brushland(inColor);
+		dcMem.SelectObject(&brushland);
+		dcMem.Polygon(pts, i.size());
+		//brushland = dcMem.SelectObject(RGB(203, 199, 131));
+	}
+	//mPen.DeleteObject();
 }

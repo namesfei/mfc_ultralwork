@@ -48,8 +48,9 @@ public:
 	afx_msg void OnUu32771();
 	afx_msg void Onland();
 	afx_msg void Online();
-	afx_msg void OnPland();
-	afx_msg void OnPline();
+	/*afx_msg void OnPland();
+	afx_msg void OnPline();*/
 	afx_msg void OnShatan();
 	afx_msg void Ondeng();
+	afx_msg void OnDeep();
 };

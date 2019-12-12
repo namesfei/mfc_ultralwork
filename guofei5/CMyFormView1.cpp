@@ -5,12 +5,12 @@
 #include "guofei5.h"
 #include "CMyFormView1.h"
 #include "CMyFormView0.h"
+#include "CDeepdlg.h"
 #include"guofei5Dlg.h"
 #include "ship.h"
 #include<string>
 #include <vector>
 // CMyFormView1
-
 static double dx = 0, dy = 0,dcours=0;
 static vector<vector<double>> linepoint;
 double scale = 0.5;
@@ -24,6 +24,7 @@ CMyFormView1::CMyFormView1()
 	m_select = 0;
 	m_countland=0;
 	m_countline=0;
+	tempstr = "";
 }
 
 CMyFormView1::~CMyFormView1()
@@ -45,6 +46,7 @@ ON_WM_TIMER()
 ON_WM_MOUSEWHEEL()
 ON_WM_LBUTTONDOWN()
 ON_WM_RBUTTONDOWN()
+//ON_WM_CHAR()
 END_MESSAGE_MAP()
 
 
@@ -168,6 +170,15 @@ void CMyFormView1::OnDraw(CDC* pDC)
 		DrawIcon(dcMem, i.x, i.y, micon);
 	}
 	
+	//添加水深点
+	TEXTMETRIC tm;
+	dcMem.GetTextMetrics(&tm);
+	for (size_t i = 0; i < m_deep.size(); ++i) {
+		//CreateSolidCaret(tm.tmAveCharWidth / 8, tm.tmHeight);
+		//SetCaretPos(m_deep[i]);
+		dcMem.TextOutW(m_deep[i].x, m_deep[i].y, m_deeptxt[i]);
+	}
+
 	//dcMem.SelectObject(pOldBrush);
 
 	//检测船舶选择，绘制船舶轮廓
@@ -360,6 +371,16 @@ void CMyFormView1::OnLButtonDown(UINT nFlags, CPoint point)
 			m_deng.push_back(point);
 			Invalidate();
 		}
+		else if (5==m_select) {
+			//SetCaretPos(point);
+			CDeepdlg deepdlg;
+			deepdlg.DoModal();
+			if (deepdlg.m_deepdata != "") {
+				m_deep.push_back(point);
+				m_deeptxt.push_back(deepdlg.m_deepdata);
+			}
+			Invalidate();
+		}
 		else {
 			m_tempvct.push_back(point);
 			Invalidate();
@@ -432,3 +453,18 @@ void CMyFormView1::m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>>& vec, i
 	}
 	//mPen.DeleteObject();
 }
+
+
+//void CMyFormView1::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+//{
+//	// TODO: 在此添加消息处理程序代码和/或调用默认值
+//	MessageBox(_T("gdfgdf"));
+//	if (5 == m_select) {
+//		CString str;
+//		str.Format(_T("%d"), nChar);
+//		tempstr += str;
+//		Invalidate();
+//	}
+//
+//	CFormView::OnChar(nChar, nRepCnt, nFlags);
+//}

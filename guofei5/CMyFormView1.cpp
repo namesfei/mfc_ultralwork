@@ -199,9 +199,6 @@ void CMyFormView1::OnDraw(CDC* pDC)
 		dcMem.TextOutW(0, 40, strcous);
 		dcMem.TextOutW(0, 70, strspe);
 		dcMem.TextOutW(0, 100, strpos);
-		CString ss;
-		ss.Format(_T("%d"), m_select);
-		dcMem.TextOutW(1, 130, ss);
 		//显示船舶信息
 		double cx = 100;//调整起始位置
 		double cy = 600;
@@ -244,7 +241,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	GetClientRect(&rect1);
 	dcMem.BitBlt(0,43, rect1.Width(), rect1.Height(), &dcCompatible, 0, 0, SRCCOPY);*/
 
-	pDC->BitBlt(0, 43, rect.Width(), rect.Height(), &dcMem, 0, 0, SRCCOPY);//将内存DC上的图象拷贝到前台
+	pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &dcMem, 0, 0, SRCCOPY);//将内存DC上的图象拷贝到前台
 	dcMem.DeleteDC();//删除DC
 	bmp.DeleteObject();
 }

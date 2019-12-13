@@ -153,8 +153,8 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	//dcMem.SelectObject(pOldBrush);
 
 	//绘制海图
-	
-	////绘制等深线
+
+	//绘制等深线
 	m_drawmap(dcMem, m_drawline, 1, RGB(136, 152, 139), RGB(123, 193, 241));
 
 	//绘制陆地
@@ -245,7 +245,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			}
 		}
 		//判断碰撞
-		if (m_checkpeng(newx,newy,m_drawland)) {
+		if (m_checkpeng((myship.outdm()->ship_profile[3].x + newx), int(-myship.outdm()->ship_profile[3].y + newy),m_drawland)) {
 			//MessageBox(_T("碰撞！！！"));
 			dcours += 30;
 			//dx += 50;
@@ -464,19 +464,7 @@ void CMyFormView1::m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>>& vec, i
 }
 
 
-//void CMyFormView1::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
-//{
-//	// TODO: 在此添加消息处理程序代码和/或调用默认值
-//	MessageBox(_T("gdfgdf"));
-//	if (5 == m_select) {
-//		CString str;
-//		str.Format(_T("%d"), nChar);
-//		tempstr += str;
-//		Invalidate();
-//	}
-//
-//	CFormView::OnChar(nChar, nRepCnt, nFlags);
-//}
+
 
 
 bool CMyFormView1::m_checkpeng(int x,int y, std::vector<std::vector<CPoint>> m_drawland)
@@ -499,7 +487,6 @@ bool CMyFormView1::m_checkpeng(int x,int y, std::vector<std::vector<CPoint>> m_d
 			//a = i[1] - i[0];
 			//b = i[2] - i[0];
 			//double sign=b.y*cos(atan(a.y / a.x)) - b.x*sin(atan(a.y/a.x));
-			
 		}
 	}
 	return false;

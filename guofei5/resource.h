@@ -50,13 +50,19 @@
 #define ID_deng                         32784
 #define ID_32785                        32785
 #define ID_Deep                         32786
+#define ID_32787                        32787
+#define ID_32788                        32788
+#define ID_32789                        32789
+#define ID_Newmap                       32790
+#define ID_Savemap                      32791
+#define ID_Loadmap                      32792
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        141
-#define _APS_NEXT_COMMAND_VALUE         32787
+#define _APS_NEXT_COMMAND_VALUE         32793
 #define _APS_NEXT_CONTROL_VALUE         1021
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

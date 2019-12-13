@@ -10,6 +10,7 @@
 #include "ship.h"
 #include<string>
 #include <vector>
+//#include "CMapObj.h"
 // CMyFormView1
 static double dx = 0, dy = 0,dcours=0;
 static vector<vector<double>> linepoint;
@@ -22,9 +23,9 @@ CMyFormView1::CMyFormView1()
 	: CFormView(IDD_DIALOG2)
 {
 	m_select = 0;
-	m_countland=0;
-	m_countline=0;
-	tempstr = "";
+	//m_countland=0;
+	//m_countline=0;
+	//tempstr = "";
 }
 
 CMyFormView1::~CMyFormView1()
@@ -155,28 +156,28 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	//绘制海图
 
 	//绘制等深线
-	m_drawmap(dcMem, m_drawline, 1, RGB(136, 152, 139), RGB(123, 193, 241));
+	m_drawmap(dcMem, m_mapdata.m_drawline, 1, RGB(136, 152, 139), RGB(123, 193, 241));
 
 	//绘制陆地
-	m_drawmap(dcMem, m_drawland, 3, RGB(95, 106, 96), RGB(203, 199, 131));
+	m_drawmap(dcMem, m_mapdata.m_drawland, 3, RGB(95, 106, 96), RGB(203, 199, 131));
 
 	//绘制沙滩
-	m_drawmap(dcMem, m_drawbeach, 1, RGB(153, 112, 53), RGB(174, 160, 82));
+	m_drawmap(dcMem, m_mapdata.m_drawbeach, 1, RGB(153, 112, 53), RGB(174, 160, 82));
 
 	//添加灯浮
 
 	HICON micon = AfxGetApp()->LoadIcon(IDI_ICON1);
-	for (auto i : m_deng) {
+	for (auto i : m_mapdata.m_deng) {
 		DrawIcon(dcMem, i.x, i.y, micon);
 	}
 	
 	//添加水深点
 	TEXTMETRIC tm;
 	dcMem.GetTextMetrics(&tm);
-	for (size_t i = 0; i < m_deep.size(); ++i) {
+	for (size_t i = 0; i < m_mapdata.m_deep.size(); ++i) {
 		//CreateSolidCaret(tm.tmAveCharWidth / 8, tm.tmHeight);
 		//SetCaretPos(m_deep[i]);
-		dcMem.TextOutW(m_deep[i].x, m_deep[i].y, m_deeptxt[i]);
+		dcMem.TextOutW(m_mapdata.m_deep[i].x, m_mapdata.m_deep[i].y, m_mapdata.m_deeptxt[i]);
 	}
 
 	//dcMem.SelectObject(pOldBrush);
@@ -245,7 +246,7 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			}
 		}
 		//判断碰撞
-		if (m_checkpeng((myship.outdm()->ship_profile[3].x + newx), int(-myship.outdm()->ship_profile[3].y + newy),m_drawland)) {
+		if (m_checkpeng((myship.outdm()->ship_profile[3].x + newx), int(-myship.outdm()->ship_profile[3].y + newy), m_mapdata.m_drawland)) {
 			//MessageBox(_T("碰撞！！！"));
 			dcours += 30;
 			//dx += 50;
@@ -377,7 +378,7 @@ void CMyFormView1::OnLButtonDown(UINT nFlags, CPoint point)
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
 	if (m_select) {
 		if (4 == m_select) {
-			m_deng.push_back(point);
+			m_mapdata.m_deng.push_back(point);
 			Invalidate();
 		}
 		else if (5==m_select) {
@@ -385,8 +386,8 @@ void CMyFormView1::OnLButtonDown(UINT nFlags, CPoint point)
 			CDeepdlg deepdlg;
 			deepdlg.DoModal();
 			if (deepdlg.m_deepdata != "") {
-				m_deep.push_back(point);
-				m_deeptxt.push_back(deepdlg.m_deepdata);
+				m_mapdata.m_deep.push_back(point);
+				m_mapdata.m_deeptxt.push_back(deepdlg.m_deepdata);
 			}
 			Invalidate();
 		}
@@ -409,17 +410,17 @@ void CMyFormView1::OnRButtonDown(UINT nFlags, CPoint point)
 		switch (m_select)
 		{
 		case 1:
-			m_drawland.push_back(m_tempvct);
+			m_mapdata.m_drawland.push_back(m_tempvct);
 			m_tempvct.clear();
 			Invalidate();
 			break;
 		case 2:
-			m_drawline.push_back(m_tempvct);
+			m_mapdata.m_drawline.push_back(m_tempvct);
 			m_tempvct.clear();
 			Invalidate();
 			break;
 		case 3:
-			m_drawbeach.push_back(m_tempvct);
+			m_mapdata.m_drawbeach.push_back(m_tempvct);
 			m_tempvct.clear();
 			Invalidate();
 			break;
@@ -490,4 +491,44 @@ bool CMyFormView1::m_checkpeng(int x,int y, std::vector<std::vector<CPoint>> m_d
 		}
 	}
 	return false;
+}
+
+
+void CMyFormView1::newmap()
+{
+	// TODO: 在此处添加实现代码.
+	m_mapdata.clearmap();
+	Invalidate();
+}
+
+
+void CMyFormView1::savemap()
+{
+	// TODO: 在此处添加实现代码.
+	CFile file(_T("map1.guofei"), CFile::modeCreate | CFile::modeWrite);
+	CArchive ar(&file, CArchive::store);
+	ar.WriteObject(&m_mapdata);
+	ar.Flush();
+	ar.Close();
+	MessageBox(_T("保存成功"));
+}
+
+
+void CMyFormView1::loadmap()
+{
+	// TODO: 在此处添加实现代码.
+	m_mapdata.clearmap();
+	CFile file(_T("map1.guofei"), CFile::modeRead);
+	CArchive ar(&file, CArchive::load);
+	CMapObj* prestore = dynamic_cast<CMapObj*>(ar.ReadObject(RUNTIME_CLASS(CMapObj)));	
+	ar.Close();
+	m_mapdata.m_drawland = prestore->m_drawland;
+	m_mapdata.m_drawline = prestore->m_drawline;
+	m_mapdata.m_drawbeach = prestore->m_drawbeach;
+	m_mapdata.m_deng = prestore->m_deng;
+	m_mapdata.m_deep = prestore->m_deep;
+	m_mapdata.m_deeptxt = prestore->m_deeptxt;
+	delete prestore;
+	Invalidate();
+	MessageBox(_T("读取成功"));
 }

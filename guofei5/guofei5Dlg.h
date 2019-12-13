@@ -53,4 +53,7 @@ public:
 	afx_msg void OnShatan();
 	afx_msg void Ondeng();
 	afx_msg void OnDeep();
+	afx_msg void OnNewmap();
+	afx_msg void OnSavemap();
+	afx_msg void OnLoadmap();
 };

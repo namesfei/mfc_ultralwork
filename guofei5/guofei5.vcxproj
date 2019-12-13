@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="CDeepdlg.h" />
     <ClInclude Include="CEditEx.h" />
+    <ClInclude Include="CMapObj.h" />
     <ClInclude Include="CMyFormView0.h" />
     <ClInclude Include="CMyFormView1.h" />
     <ClInclude Include="framework.h" />
@@ -202,6 +203,7 @@
   <ItemGroup>
     <ClCompile Include="CDeepdlg.cpp" />
     <ClCompile Include="CEditEx.cpp" />
+    <ClCompile Include="CMapObj.cpp" />
     <ClCompile Include="CMyFormView0.cpp" />
     <ClCompile Include="CMyFormView1.cpp" />
     <ClCompile Include="guofei5.cpp" />

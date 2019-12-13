@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <vector>
-
+#include "CMapObj.h"
 
 // CMyFormView1 窗体视图
 
@@ -46,22 +46,26 @@ public:
 public:
 	int m_select;	//选择菜单栏选项
 private:
-	std::vector<std::vector<CPoint>> m_drawland;
-	std::vector<std::vector<CPoint>> m_drawline;
-	std::vector<std::vector<CPoint>> m_drawbeach;
-	std::vector<CPoint> m_deng;
-	std::vector<CPoint> m_deep;
-	std::vector<CString> m_deeptxt;
+	//std::vector<std::vector<CPoint>> m_drawland;
+	//std::vector<std::vector<CPoint>> m_drawline;
+	//std::vector<std::vector<CPoint>> m_drawbeach;
+	//std::vector<CPoint> m_deng;
+	//std::vector<CPoint> m_deep;
+	//std::vector<CString> m_deeptxt;
 	std::vector<CPoint > m_tempvct;
-	CString tempstr;
-	int m_countland;
-	int m_countline;
+	CMapObj m_mapdata;
+	//CString tempstr;
+	//int m_countland;
+	//int m_countline;
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	void m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>> &vec,int nwidth,COLORREF lineColor, COLORREF inColor);
 //	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	bool m_checkpeng(int x, int y, std::vector<std::vector<CPoint>> m_drawland);
+	void newmap();
+	void savemap();
+	void loadmap();
 };
 
 

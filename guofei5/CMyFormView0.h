@@ -61,6 +61,9 @@ private:
 	CButton delet_button;
 public:
 	afx_msg void OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBnClickedButton3();
+private:
+	CButton m_selectp;
 };
 
 

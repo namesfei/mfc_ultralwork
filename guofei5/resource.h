@@ -34,6 +34,7 @@
 #define IDC_EDIT12                      1017
 #define IDC_EDIT13                      1018
 #define IDC_EDIT14                      1019
+#define IDC_BUTTON3                     1021
 #define ID_UU32771                      32771
 #define ID_UU32772                      32772
 #define ID_32773                        32773
@@ -56,14 +57,16 @@
 #define ID_Newmap                       32790
 #define ID_Savemap                      32791
 #define ID_Loadmap                      32792
+#define ID_32793                        32793
+#define ID_Returnlast                   32794
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        141
-#define _APS_NEXT_COMMAND_VALUE         32793
-#define _APS_NEXT_CONTROL_VALUE         1021
+#define _APS_NEXT_COMMAND_VALUE         32795
+#define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

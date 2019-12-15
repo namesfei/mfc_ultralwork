@@ -23,6 +23,7 @@ CMyFormView1::CMyFormView1()
 	: CFormView(IDD_DIALOG2)
 {
 	m_select = 0;
+	m_shipstart = { 100,600 };
 	//m_countland=0;
 	//m_countline=0;
 	//tempstr = "";
@@ -48,6 +49,7 @@ ON_WM_MOUSEWHEEL()
 ON_WM_LBUTTONDOWN()
 ON_WM_RBUTTONDOWN()
 //ON_WM_CHAR()
+ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -175,12 +177,8 @@ void CMyFormView1::OnDraw(CDC* pDC)
 	TEXTMETRIC tm;
 	dcMem.GetTextMetrics(&tm);
 	for (size_t i = 0; i < m_mapdata.m_deep.size(); ++i) {
-		//CreateSolidCaret(tm.tmAveCharWidth / 8, tm.tmHeight);
-		//SetCaretPos(m_deep[i]);
 		dcMem.TextOutW(m_mapdata.m_deep[i].x, m_mapdata.m_deep[i].y, m_mapdata.m_deeptxt[i]);
 	}
-
-	//dcMem.SelectObject(pOldBrush);
 
 	//检测船舶选择，绘制船舶轮廓
 	if (shipdata.length) {
@@ -208,17 +206,23 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			strpos += "W";
 		else
 			strpos += "E";
+		dcMem.SetBkMode(TRANSPARENT);
 		dcMem.TextOutW(0, 80, strcous);
 		dcMem.TextOutW(0, 110, strspe);
 		dcMem.TextOutW(0, 140, strpos);
 		//显示船舶信息
-		double cx = 100;//调整起始位置
-		double cy = 600;
-		double newx = cx + dx;
-		double newy = cy - dy;
-		//绘制船舶轮廓
+		//double cx = 100;//调整起始位置
+		//double cy = 600;
+		double newx = m_shipstart.x + dx;
+		double newy = m_shipstart.y - dy;
+		//判断碰撞
+		if (m_checkpeng((myship.outdm()->ship_profile[3].x + newx), int(-myship.outdm()->ship_profile[3].y + newy), m_mapdata.m_drawland)) {
+			dcours += 30;	
+		}
+		//绘制矢量线
 		dcMem.MoveTo(int(myship.outdm()->ship_profile[3].x + newx), int(-myship.outdm()->ship_profile[3].y + newy));
 		dcMem.LineTo(int(myship.outdm()->ship_profile[5].x + newx), int(-myship.outdm()->ship_profile[5].y + newy));
+		//绘制船舶轮廓
 		for (int i = 0; i < 5; i++) {
 			CPen pNewPen;
 			pNewPen.CreatePen(PS_SOLID, 2, RGB(rand() % 255, rand() % 255, i*20 % 255)); // 随机色
@@ -230,28 +234,29 @@ void CMyFormView1::OnDraw(CDC* pDC)
 			else {
 				dcMem.LineTo(int(myship.outdm()->ship_profile[i + 1].x + newx), int(-myship.outdm()->ship_profile[i + 1].y + newy));
 			}
+			dcMem.SelectObject(&poldPen);
 		}
 		//画轨迹
 		if (dy) {
 			CPen pNewPen;
-			pNewPen.CreatePen(PS_DOT, 1, RGB(255, 0, 0)); // 随机色
+			pNewPen.CreatePen(PS_DOT, 1, RGB(255, 0, 0)); 
 			CPen* poldPen = dcMem.SelectObject(&pNewPen);
-			dcMem.MoveTo((int)cx, (int)cy);
+			dcMem.MoveTo(m_shipstart);
 			vector<double> tempvec;
-			tempvec.push_back(cx + dx);
-			tempvec.push_back(cy - dy);
+			tempvec.push_back(newx);
+			tempvec.push_back(newy);
 			linepoint.push_back(tempvec);
 			for (auto i : linepoint) {
 				dcMem.LineTo((int)i[0], (int)i[1]);
 			}
+			dcMem.SelectObject(&poldPen);
 		}
-		//判断碰撞
-		if (m_checkpeng((myship.outdm()->ship_profile[3].x + newx), int(-myship.outdm()->ship_profile[3].y + newy), m_mapdata.m_drawland)) {
-			//MessageBox(_T("碰撞！！！"));
-			dcours += 30;
-			//dx += 50;
-			//dy += 50;	
-		}
+		////判断碰撞
+		//for (int i = 0; i < 5; i++) {
+		//	if (m_checkpeng((myship.outdm()->ship_profile[i].x + newx), int(-myship.outdm()->ship_profile[i].y + newy), m_mapdata.m_drawland)) {
+		//		dcours += 30;
+		//	}
+		//}
 	}
 	/*CBitmap bitmap;
 	bitmap.LoadBitmapW(IDB_BITMAP1);
@@ -296,10 +301,9 @@ void CMyFormView1::OnTimer(UINT_PTR nIDEvent)
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView0* cf = (CMyFormView0*)pdlg->m_cSplitter.GetPane(0, 0);
 	if (cf->m_tempship.name != "") {
-
 		double dspeed;
 		dspeed = (25.0 - (double)cf->sp_slider.GetPos()) * 0.1 * 1000 / 3600;
-		dcours += (((double)cf->cous_slider.GetPos() - 80)/10.0)*dspeed;
+		dcours += (((double)cf->cous_slider.GetPos() - 80)/10.0)*dspeed*0.5;
 		shiliang = dspeed * 60*10;//一分钟后的船舶矢量
 		if (dcours<0)
 		{
@@ -310,7 +314,6 @@ void CMyFormView1::OnTimer(UINT_PTR nIDEvent)
 		}
 		dx += sin(dcours * 3.14159 / 180) * dspeed;
 		dy += cos(dcours * 3.14159 / 180) * dspeed;
-
 		/*dx += sin(((double)cf->cous_slider.GetPos() - 45) *3.14/ 180) * dspeed;
 		dy += cos(((double)cf->cous_slider.GetPos() - 45)*3.14 / 180) * dspeed;
 		*/
@@ -376,6 +379,12 @@ BOOL CMyFormView1::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 void CMyFormView1::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 在此添加消息处理程序代码和/或调用默认值
+
+	////调试碰撞
+	//if (m_checkpeng(point.x, point.y, m_mapdata.m_drawland)) {
+	//	MessageBox(_T("在里面"));
+	//}
+
 	if (m_select) {
 		if (4 == m_select) {
 			m_mapdata.m_deng.push_back(point);
@@ -390,6 +399,10 @@ void CMyFormView1::OnLButtonDown(UINT nFlags, CPoint point)
 				m_mapdata.m_deeptxt.push_back(deepdlg.m_deepdata);
 			}
 			Invalidate();
+		}
+		else if (11 == m_select) {
+			m_shipstart = point;
+			m_select = 0;
 		}
 		else {
 			m_tempvct.push_back(point);
@@ -439,7 +452,7 @@ void CMyFormView1::m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>>& vec, i
 	// TODO: 在此处添加实现代码.
 	CPen mPen;
 	mPen.CreatePen(PS_SOLID, nwidth, lineColor);
-	CPen* poldPen0 = dcMem.SelectObject(&mPen);
+	CPen* poldPen = dcMem.SelectObject(&mPen);
 	for (size_t i = 0; i < m_tempvct.size(); ++i) {
 		dcMem.MoveTo(m_tempvct[i]);
 		if (i == m_tempvct.size() - 1) {
@@ -448,8 +461,8 @@ void CMyFormView1::m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>>& vec, i
 		else {
 			dcMem.LineTo(m_tempvct[i + 1]);
 		}
-
 	}
+	dcMem.SelectObject(&poldPen);
 	//填充
 	for (auto i : vec) {
 		CPoint pts[100];
@@ -457,11 +470,11 @@ void CMyFormView1::m_drawmap(CDC &dcMem,std::vector<std::vector<CPoint>>& vec, i
 			pts[j] = i[j];
 		}
 		CBrush brushland(inColor);
-		dcMem.SelectObject(&brushland);
-		dcMem.Polygon(pts, i.size());
+		CBrush* poldbrush= dcMem.SelectObject(&brushland);
+		dcMem.Polygon(pts, int(i.size()));
+		dcMem.SelectObject(&poldbrush);
 		//brushland = dcMem.SelectObject(RGB(203, 199, 131));
 	}
-	//mPen.DeleteObject();
 }
 
 
@@ -472,16 +485,19 @@ bool CMyFormView1::m_checkpeng(int x,int y, std::vector<std::vector<CPoint>> m_d
 {
 	// TODO: 在此处添加实现代码.
 
-	int count=0;
+
 	for (auto i : m_drawland) {
-		if (i.size() >= 3) {
-			for (size_t j = 0; j < i.size(); ++j) {
-				if (y > min(i[j].y , (j != i.size() - 1 ? i[j + 1] : i[0]).y) && y <= max(i[j].y, (j != i.size() - 1 ? i[j + 1] : i[0]).y)&& x < max(i[j].x, (j != i.size() - 1 ? i[j + 1] : i[0]).x)) {
+		int count = 0;
+		size_t sz = i.size();
+		if (sz >= 3) {
+			for (size_t j = 0; j < sz; ++j) {
+				//if (y > min(i[j].y , (j != sz - 1 ? i[j + 1] : i[0]).y) && y <= max(i[j].y, (j != sz - 1 ? i[j + 1] : i[0]).y)&& x < max(i[j].x, (j != sz - 1 ? i[j + 1] : i[0]).x)) {
+				if(isleft(x,y,i[j], j != sz - 1 ? i[j + 1] : i[0])){
 					++count;
 				}
 			}
 			if (count % 2 != 0) {
-			return true;
+				return true;
 			}
 			////判断顺时针还是逆时针
 			//CPoint a, b;
@@ -505,19 +521,65 @@ void CMyFormView1::newmap()
 void CMyFormView1::savemap()
 {
 	// TODO: 在此处添加实现代码.
-	CFile file(_T("map1.guofei"), CFile::modeCreate | CFile::modeWrite);
-	CArchive ar(&file, CArchive::store);
-	ar.WriteObject(&m_mapdata);
-	ar.Flush();
-	ar.Close();
-	MessageBox(_T("保存成功"));
+	CFileDialog SaveDlg(FALSE,_T("guofei"));
+	TCHAR szFilters[] =
+		_T("guofei source file(*.guofei)\0*.guofei\0")\
+		"\0";
+	SaveDlg.m_ofn.lpstrTitle = _T("保存地图");
+	SaveDlg.m_ofn.lpstrFilter = szFilters;
+	if (IDOK == SaveDlg.DoModal()) {
+		CFile file(SaveDlg.GetPathName(), CFile::modeCreate | CFile::modeWrite);
+		CArchive ar(&file, CArchive::store);
+		ar.WriteObject(&m_mapdata);
+		ar.Flush();
+		ar.Close();
+		MessageBox(_T("保存成功"));
+	}
+	//CFile file(_T("map1.guofei"), CFile::modeCreate | CFile::modeWrite);
+	//CArchive ar(&file, CArchive::store);
+	//ar.WriteObject(&m_mapdata);
+	//ar.Flush();
+	//ar.Close();
+	//MessageBox(_T("保存成功"));
 }
 
 
 void CMyFormView1::loadmap()
 {
 	// TODO: 在此处添加实现代码.
-	m_mapdata.clearmap();
+	m_select = 0; //重置绘画状态
+	CFileDialog OpenDlg(TRUE);
+	TCHAR szFilters[] =
+		_T("guofei source file(*.guofei)\0*.guofei\0")\
+		"\0";
+	OpenDlg.m_ofn.lpstrTitle = _T("读取地图");
+	OpenDlg.m_ofn.lpstrFilter = szFilters;
+	CFile File;
+	CFileException e;
+	//构造文件，同时增加异常处理
+	if (IDOK == OpenDlg.DoModal()) {
+		if (!File.Open(OpenDlg.GetPathName(), CFile::modeRead, &e))
+		{
+			CString strErr;
+			strErr.Format(_T("File could not be opened %d\n"), e.m_cause);
+			MessageBox(strErr);
+		}
+
+		CArchive ar(&File, CArchive::load);
+		CMapObj* prestore = dynamic_cast<CMapObj*>(ar.ReadObject(RUNTIME_CLASS(CMapObj)));
+		ar.Close();
+		m_mapdata.m_drawland = prestore->m_drawland;
+		m_mapdata.m_drawline = prestore->m_drawline;
+		m_mapdata.m_drawbeach = prestore->m_drawbeach;
+		m_mapdata.m_deng = prestore->m_deng;
+		m_mapdata.m_deep = prestore->m_deep;
+		m_mapdata.m_deeptxt = prestore->m_deeptxt;
+		delete prestore;
+		prestore = NULL;
+		Invalidate();
+	}
+
+	/*m_mapdata.clearmap();
 	CFile file(_T("map1.guofei"), CFile::modeRead);
 	CArchive ar(&file, CArchive::load);
 	CMapObj* prestore = dynamic_cast<CMapObj*>(ar.ReadObject(RUNTIME_CLASS(CMapObj)));	
@@ -530,5 +592,73 @@ void CMyFormView1::loadmap()
 	m_mapdata.m_deeptxt = prestore->m_deeptxt;
 	delete prestore;
 	Invalidate();
-	MessageBox(_T("读取成功"));
+	MessageBox(_T("读取成功"));*/
+}
+
+
+void CMyFormView1::returnlast()
+{
+	// TODO: 在此处添加实现代码.
+	if (m_select) {
+		switch (m_select)
+		{
+		case 1:
+			if (!m_tempvct.empty()) {
+				m_tempvct.pop_back();
+				Invalidate();
+			}
+			break;
+		case 2:
+			if (!m_tempvct.empty()) {
+				m_tempvct.pop_back();
+				Invalidate();
+			}
+			break;
+		case 3:
+			if (!m_tempvct.empty()) {
+				m_tempvct.pop_back();
+				Invalidate();
+			}
+			break;
+		case 4:
+			if (!m_mapdata.m_deng.empty()) {
+				m_mapdata.m_deng.pop_back();
+				Invalidate();
+			}
+			break;
+		case 5:
+			if (!m_mapdata.m_deep.empty()) {
+				m_mapdata.m_deep.pop_back();
+				m_mapdata.m_deeptxt.pop_back();
+				Invalidate();
+			}
+			break;
+		default:
+			break;
+		}
+
+	}
+}
+
+bool CMyFormView1::isleft(int x, int y, CPoint a, CPoint b)
+{
+	// TODO: 在此处添加实现代码.
+	bool isok=false;
+	if (y > min(a.y, b.y) && y < max(a.y, b.y)) {
+		if (((double)a.x - b.x) / ((double)a.y - b.y) * (y - (double)a.y) + (double)a.x > x) {
+			isok = true;
+		}
+	}
+	return isok;
+}
+
+
+void CMyFormView1::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (m_select >0 && m_select<6) {
+		HCURSOR hCur = LoadCursor(NULL, IDC_CROSS);
+		::SetCursor(hCur);
+	}
+	CFormView::OnMouseMove(nFlags, point);
 }

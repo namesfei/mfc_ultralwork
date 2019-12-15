@@ -46,17 +46,9 @@ public:
 public:
 	int m_select;	//选择菜单栏选项
 private:
-	//std::vector<std::vector<CPoint>> m_drawland;
-	//std::vector<std::vector<CPoint>> m_drawline;
-	//std::vector<std::vector<CPoint>> m_drawbeach;
-	//std::vector<CPoint> m_deng;
-	//std::vector<CPoint> m_deep;
-	//std::vector<CString> m_deeptxt;
 	std::vector<CPoint > m_tempvct;
 	CMapObj m_mapdata;
-	//CString tempstr;
-	//int m_countland;
-	//int m_countline;
+
 public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
@@ -66,6 +58,13 @@ public:
 	void newmap();
 	void savemap();
 	void loadmap();
+	void returnlast();
+//	void m_selectstart();
+private:
+	CPoint m_shipstart;
+public:
+	bool isleft(int x, int y, CPoint a, CPoint b);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 

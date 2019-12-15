@@ -56,4 +56,5 @@ public:
 	afx_msg void OnNewmap();
 	afx_msg void OnSavemap();
 	afx_msg void OnLoadmap();
+	afx_msg void OnReturnlast();
 };

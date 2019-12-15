@@ -47,6 +47,7 @@ void CMyFormView0::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SLIDER2, sp_slider);
 	DDX_Control(pDX, IDC_SLIDER1, cous_slider);
 	DDX_Control(pDX, IDC_BUTTON1, delet_button);
+	DDX_Control(pDX, IDC_BUTTON3, m_selectp);
 }
 
 BEGIN_MESSAGE_MAP(CMyFormView0, CFormView)
@@ -57,6 +58,7 @@ BEGIN_MESSAGE_MAP(CMyFormView0, CFormView)
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER2, &CMyFormView0::OnNMCustomdrawSlider2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CMyFormView0::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -132,6 +134,7 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 	sp_slider.EnableWindow(); cous_slider.EnableWindow();
 	sp_slider.SetPos(25); cous_slider.SetPos(80);
 	delet_button.EnableWindow();
+	m_selectp.EnableWindow();
 	//检测当前下拉框选择内容
 	int index = selectship.GetCurSel();
 	CString str;
@@ -168,6 +171,7 @@ void CMyFormView0::OnCbnSelchangeCombo1()
 	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
 	CMyFormView1* cf1= (CMyFormView1*)pdlg->m_cSplitter.GetPane(0, 1);
 	cf1->m_resetval(1);
+	cf1->m_select = 0;
 	pdlg->m_cSplitter.GetPane(0, 1)->Invalidate();
 
 }
@@ -322,4 +326,13 @@ void CMyFormView0::OnNMCustomdrawSlider2(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
+}
+
+
+void CMyFormView0::OnBnClickedButton3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	Cguofei5Dlg* pdlg = (Cguofei5Dlg*)AfxGetMainWnd();
+	CMyFormView1* cf1 = (CMyFormView1*)pdlg->m_cSplitter.GetPane(0, 1);
+	cf1->m_select = 11;
 }

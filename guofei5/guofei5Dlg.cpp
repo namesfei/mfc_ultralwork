@@ -89,6 +89,7 @@ BEGIN_MESSAGE_MAP(Cguofei5Dlg, CDialogEx)
 	ON_COMMAND(ID_Newmap, &Cguofei5Dlg::OnNewmap)
 	ON_COMMAND(ID_Savemap, &Cguofei5Dlg::OnSavemap)
 	ON_COMMAND(ID_Loadmap, &Cguofei5Dlg::OnLoadmap)
+	ON_COMMAND(ID_Returnlast, &Cguofei5Dlg::OnReturnlast)
 END_MESSAGE_MAP()
 
 
@@ -324,4 +325,12 @@ void Cguofei5Dlg::OnLoadmap()
 	// TODO: 在此添加命令处理程序代码
 	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);
 	cf1->loadmap();
+}
+
+
+void Cguofei5Dlg::OnReturnlast()
+{
+	// TODO: 在此添加命令处理程序代码
+	CMyFormView1* cf1 = (CMyFormView1*)m_cSplitter.GetPane(0, 1);
+	cf1->returnlast();
 }

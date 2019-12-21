@@ -644,8 +644,8 @@ bool CMyFormView1::isleft(int x, int y, CPoint a, CPoint b)
 {
 	// TODO: 在此处添加实现代码.
 	bool isok=false;
-	if (y > min(a.y, b.y) && y < max(a.y, b.y)) {
-		if (((double)a.x - b.x) / ((double)a.y - b.y) * (y - (double)a.y) + (double)a.x > x) {
+	if (y >= min(a.y, b.y) && y < max(a.y, b.y)) {
+		if (((double)a.x - b.x) / ((double)a.y - b.y) * (y - (double)a.y) + (double)a.x >=x) {
 			isok = true;
 		}
 	}
